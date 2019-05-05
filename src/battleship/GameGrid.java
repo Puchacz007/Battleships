@@ -2,7 +2,7 @@ package battleship;
 
 public class GameGrid {
 
-    private boolean[][] gridTable;
+    private final boolean[][] gridTable;
 
     GameGrid() {
         gridTable = new boolean[20][20];

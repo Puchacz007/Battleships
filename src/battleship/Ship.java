@@ -1,20 +1,21 @@
 package battleship;
 
-import java.util.Vector;
-
-public class Ship {
+class Ship {
 
 
     Ship(int l,int w,int x,int y)
     {
-    lenght = l;
+        length = l;
     width= w ;
     xHeadLocation = x;
     yHeadLocation = y;
-    hitpoints=lenght*width;
+        hitpoints = length * width;
     }
-    int lenght, width;
-    int xHeadLocation,yHeadLocation;
+
+    final int length;
+    final int width;
+    final int xHeadLocation;
+    final int yHeadLocation;
 
     private int hitpoints;
 

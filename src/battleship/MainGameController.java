@@ -11,24 +11,27 @@ import javafx.scene.layout.Pane;
 public class MainGameController {
 
     @FXML
-    public ImageView target; // target symbol
+    private ImageView target; // target symbol
     @FXML
-    public GridPane grid; //grid to choose target and see result of shoot
+    private GridPane grid; //grid to choose target and see result of shoot
     @FXML
-    public GridPane yourGrid; // grid to see computer shoot
+    private GridPane yourGrid; // grid to see computer shoot
 
     private int playerCrNumber,computerCrNumber;
     private int targetX,targetY;
     private  GameGrid computerTargetGrid;
     private AI computer;
+    private boolean[][] playerAlreadyShoot;
+    private boolean[][] computerAlreadyShoot;
     public void initialize()
     {
-      //targetGrid =new GameGrid();
       computerTargetGrid=new GameGrid();
       computer = new AI();
 
         GridPane.setHalignment(target, HPos.CENTER);
         GridPane.setValignment(target, VPos.CENTER);
+        playerAlreadyShoot = new boolean[20][20];
+        computerAlreadyShoot = new boolean[20][20];
     }
 
     void transferDataToMainGame(int crNumber,GameGrid playerGrid)
@@ -48,6 +51,13 @@ public class MainGameController {
         mouseY=mouseY/30;
         targetX=mouseX;
         targetY=mouseY;
+        if (playerAlreadyShoot[targetX][targetY]) {
+            System.out.println("You shoot this target already");
+            return;
+        }
+
+
+
         target.setVisible(true);
 
        grid.add(target,mouseX,mouseY);
@@ -77,10 +87,13 @@ public class MainGameController {
                grid.add(pane,targetX,targetY);
 
             }
-            System.out.println("Computer turn");
-            targetX = computer.chooseTarget(20);
-            targetY = computer.chooseTarget(20);
+            playerAlreadyShoot[targetX][targetY] = true;
 
+            do {
+                targetX = computer.chooseTarget(20);
+                targetY = computer.chooseTarget(20);
+            }
+            while (computerAlreadyShoot[targetX][targetY]);
             pane =new Pane();
             pane.setPrefSize(14,14);
             pane.setMaxSize(14,14);
@@ -95,6 +108,7 @@ public class MainGameController {
                 pane.setStyle("-fx-background-color: Cyan;");
                 yourGrid.add(pane,targetX,targetY);
             }
+            computerAlreadyShoot[targetX][targetY] = true;
             targetX = -1;
             targetY = -1;
         }else

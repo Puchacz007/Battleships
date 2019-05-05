@@ -6,7 +6,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -31,7 +30,7 @@ public class GameSettings {
 
         newGameStage.show();
         newGameStage.setMinHeight(640);
-        newGameStage.setMinWidth(1000);
+        newGameStage.setMinWidth(1020);
        // newGameStage.setMaxHeight(600);
         //newGameStage.setMaxWidth(800);
     }

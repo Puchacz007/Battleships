@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="1000.0" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="battleship.MainGameController">
+<?import javafx.scene.layout.*?>
+<AnchorPane maxHeight="600.0" maxWidth="1000.0" minHeight="600.0" minWidth="1000.0" prefHeight="600.0"
+            prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="battleship.MainGameController">
     <GridPane fx:id="grid" alignment="CENTER" gridLinesVisible="true" onMouseClicked="#setTarget" snapToPixel="false">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0" />
@@ -106,10 +102,10 @@
     <Button layoutX="782.0" layoutY="529.0" mnemonicParsing="false" onAction="#fire" text="FIRE" />
     <Label layoutX="694.0" layoutY="502.0" text="Select target to fire and press the button" />
     <Label layoutX="771.0" layoutY="335.0" text="Your board" />
-   <ImageView fx:id="target" fitHeight="27.0" fitWidth="27.0" layoutX="608.0" layoutY="300.0" pickOnBounds="true" preserveRatio="true" visible="false">
-      <image>
-         <Image url="@../target.png" />
-      </image></ImageView>
+    <ImageView fx:id="target" fitHeight="27.0" fitWidth="27.0" layoutX="608.0" layoutY="300.0" pickOnBounds="true"
+               preserveRatio="true" visible="false">
+        <Image url="@../target.png"/>
+    </ImageView>
    <Pane layoutX="726.0" layoutY="414.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: cyan;" />
    <Pane layoutX="726.0" layoutY="372.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: red;" />
    <Label layoutX="768.0" layoutY="421.0" text="- Miss symbol" />

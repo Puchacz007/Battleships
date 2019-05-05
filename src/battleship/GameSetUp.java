@@ -73,7 +73,7 @@ public class GameSetUp {
         currentCruiserNumber=crNumber;
     }
 
-    private EventHandler<MouseEvent> shipOnMousePressedEventHandler
+    private final EventHandler<MouseEvent> shipOnMousePressedEventHandler
             = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
@@ -85,7 +85,7 @@ public class GameSetUp {
             dragged = true;
         }
     };
-    private EventHandler<MouseEvent> shipOnMouseDraggedEventHandler =
+    private final EventHandler<MouseEvent> shipOnMouseDraggedEventHandler =
             new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
@@ -99,7 +99,7 @@ public class GameSetUp {
                     ((GridPane) event.getSource()).setTranslateY(newTranslateY);
                 }
             };
-    private EventHandler<MouseEvent> shipOnMouseReleasedEventHandler =
+    private final EventHandler<MouseEvent> shipOnMouseReleasedEventHandler =
             new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
@@ -146,7 +146,7 @@ public class GameSetUp {
         }
     }
 
-    private EventHandler<KeyEvent> setOnKeyPressed = event -> {
+    private final EventHandler<KeyEvent> setOnKeyPressed = event -> {
 
         if (event.getCode() == KeyCode.R && dragged)
             rotate();

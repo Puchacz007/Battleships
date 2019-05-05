@@ -1,11 +1,9 @@
 package battleship;
 
-import javafx.scene.layout.GridPane;
-
 import java.util.Random;
 
-public class AI {
-    private GameGrid shipsGrid;
+class AI {
+    private final GameGrid shipsGrid;
     AI()
     {
         shipsGrid = new GameGrid();
@@ -25,7 +23,7 @@ public class AI {
         int targetX;
         int targetY;
         int errorExit=0;
-        int lenght;
+        int length;
         int width;
         int temp;
         for(int i = 0;i<crNumber;i++) {
@@ -36,28 +34,29 @@ public class AI {
                 targetY = chooseTarget(18);
                 if(chooseRotation())
                 {
-                    lenght=3;
+                    length = 3;
                     width=1;
                 }else
                 {
                     width=3;
-                    lenght=1;
+                    length = 1;
                 }
-                if(shipsGrid.isAvailable(targetX, targetY, lenght, width))break;
-                temp=lenght;
-                lenght=width;
+                if (shipsGrid.isAvailable(targetX, targetY, length, width)) break;
+                temp = length;
+                length = width;
                 width=temp;
 
                 if (errorExit==1000000)return;
 
             }
-            while (!shipsGrid.isAvailable(targetX, targetY, lenght, width));
+            while (!shipsGrid.isAvailable(targetX, targetY, length, width));
 
-            shipsGrid.markShipLocation(targetX, targetY, lenght, width);
+            shipsGrid.markShipLocation(targetX, targetY, length, width);
         }
 
     }
-    public boolean chooseRotation()//true - horizontal / false - vertical
+
+    private boolean chooseRotation()//true - horizontal / false - vertical
     {
         Random random = new Random();
         return random.nextBoolean();
