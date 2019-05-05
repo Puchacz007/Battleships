@@ -10,18 +10,14 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
-import java.awt.*;
-import java.awt.event.MouseAdapter;
 import java.io.IOException;
-
-import static java.awt.Color.*;
 
 public class GameSetUp {
     @FXML
@@ -31,12 +27,14 @@ public class GameSetUp {
     @FXML
     private GridPane grid;
 
-    double orgTranslateX, orgTranslateY;//test
-    double orgSceneX, orgSceneY;//test
+    private double orgTranslateX, orgTranslateY; //dragged object translation
+    private double orgSceneX, orgSceneY; // dragged object original location
     private GameGrid playerGrid;
-    private int crNumber = 0,currentCruiserNumber;
+    private int crNumber = 0, currentCruiserNumber, shipLength, shipWidth;
+    private boolean dragged = false;
 
-    public void startSetUpGame(ActionEvent actionEvent) throws IOException {
+    public void startMainGame(ActionEvent actionEvent) throws IOException {
+        if (currentCruiserNumber > 0) return;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("main_game.fxml"));
 
         Parent root = loader.load();
@@ -55,11 +53,18 @@ public class GameSetUp {
         cruiser.setOnMouseDragged(shipOnMouseDraggedEventHandler);
         cruiser.setOnMouseReleased(shipOnMouseReleasedEventHandler);
         playerGrid = new GameGrid();
+        shipWidth = 1;
+        shipLength = 3;
 
     }
 
-    public void rotate() {
+    private void rotate() {
 
+        if (cruiser.getRotate() == 0) cruiser.setRotate(90);
+        else cruiser.setRotate(0);
+        int temp = shipLength;
+        shipLength = shipWidth;
+        shipWidth = temp;
     }
 
     void transferDataToSetUp(String data) {
@@ -77,6 +82,7 @@ public class GameSetUp {
             orgSceneY = event.getSceneY();
             orgTranslateX = ((GridPane) event.getSource()).getTranslateX();
             orgTranslateY = ((GridPane) event.getSource()).getTranslateY();
+            dragged = true;
         }
     };
     private EventHandler<MouseEvent> shipOnMouseDraggedEventHandler =
@@ -88,6 +94,7 @@ public class GameSetUp {
                     double offsetY = event.getSceneY() - orgSceneY;
                     double newTranslateX = orgTranslateX + offsetX;
                     double newTranslateY = orgTranslateY + offsetY;
+                    cruiser.getScene().setOnKeyPressed(setOnKeyPressed);
                     ((GridPane) event.getSource()).setTranslateX(newTranslateX);
                     ((GridPane) event.getSource()).setTranslateY(newTranslateY);
                 }
@@ -99,20 +106,27 @@ public class GameSetUp {
                     if(currentCruiserNumber<=0) return;
                     int x = (int) ((cruiser.getLayoutX() + event.getSceneX() - orgSceneX));
                     int y = (int) ((cruiser.getLayoutY() + event.getSceneY() - orgSceneY));
+                    if (cruiser.getRotate() == 90) {
+                        x += 30;
+                        y -= 30;
+                    }
                     x = x / 30;
                     y = y / 30;
 
-                    if (x >= 0 && x < 20 && y >= 0 && y < 20) {
+                    if (x >= 0 && x < 20 && y >= 0 && y < 20 && playerGrid.isAvailable(x, y, shipLength, shipWidth)) {
 
-                        markShip(x,y,3,1);
+                        markShip(x, y, shipLength, shipWidth);
                         currentCruiserNumber--;
                         crNumberLabel.setText(Integer.toString(currentCruiserNumber));
                     } else {
-                        System.out.println("outside grid drop");
+                        System.out.println("bad grid drop");
                     }
 
                     ((GridPane) event.getSource()).setTranslateX(orgTranslateX);
                     ((GridPane) event.getSource()).setTranslateY(orgTranslateY);
+
+                    if (cruiser.getRotate() == 90) rotate();
+                    dragged = false;
                 }
             };
 
@@ -121,16 +135,23 @@ public class GameSetUp {
         Pane pane;
         for (int i = 0; i < length; i++) {
             for (int j = 0; j < width; j++) {
-                pane  = new Pane();
+                pane = new Pane();
                 pane.setStyle("-fx-background-color: green;");
-                pane.setPrefSize(28,28);
-                pane.setMaxSize(28,28);
+                pane.setPrefSize(28, 28);
+                pane.setMaxSize(28, 28);
                 GridPane.setHalignment(pane, HPos.CENTER);
                 GridPane.setValignment(pane, VPos.CENTER);
-                grid.add(pane, x+i, y+j);
+                grid.add(pane, x + i, y + j);
             }
         }
-
     }
+
+    private EventHandler<KeyEvent> setOnKeyPressed = event -> {
+
+        if (event.getCode() == KeyCode.R && dragged)
+            rotate();
+    };
+
+
 
 }
