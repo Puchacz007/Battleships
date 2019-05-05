@@ -1,5 +1,7 @@
-package battleship;
+package battleship.controller;
 
+import battleship.gameObjects.AI;
+import battleship.gameObjects.GameGrid;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -19,7 +21,7 @@ public class MainGameController {
 
     private int playerCrNumber,computerCrNumber;
     private int targetX,targetY;
-    private  GameGrid computerTargetGrid;
+    private GameGrid computerTargetGrid;
     private AI computer;
     private boolean[][] playerAlreadyShoot;
     private boolean[][] computerAlreadyShoot;

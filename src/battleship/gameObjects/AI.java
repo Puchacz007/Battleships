@@ -1,10 +1,11 @@
-package battleship;
+package battleship.gameObjects;
 
 import java.util.Random;
 
-class AI {
+public class AI {
     private final GameGrid shipsGrid;
-    AI()
+
+    public AI()
     {
         shipsGrid = new GameGrid();
     }

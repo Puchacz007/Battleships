@@ -4,9 +4,9 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<AnchorPane maxHeight="600.0" maxWidth="1000.0" minHeight="600.0" minWidth="1000.0" prefHeight="600.0"
-            prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="battleship.MainGameController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="600.0" maxWidth="1000.0" minHeight="600.0" minWidth="1000.0"
+            prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.172-ea"
+            fx:controller="battleship.controller.MainGameController">
     <GridPane fx:id="grid" alignment="CENTER" gridLinesVisible="true" onMouseClicked="#setTarget" snapToPixel="false">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0" />
@@ -104,7 +104,7 @@
     <Label layoutX="771.0" layoutY="335.0" text="Your board" />
     <ImageView fx:id="target" fitHeight="27.0" fitWidth="27.0" layoutX="608.0" layoutY="300.0" pickOnBounds="true"
                preserveRatio="true" visible="false">
-        <Image url="@../target.png"/>
+        <Image url="@resources/target.png"/>
     </ImageView>
    <Pane layoutX="726.0" layoutY="414.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: cyan;" />
    <Pane layoutX="726.0" layoutY="372.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: red;" />

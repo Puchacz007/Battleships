@@ -1,10 +1,10 @@
-package battleship;
+package battleship.gameObjects;
 
 public class GameGrid {
 
     private final boolean[][] gridTable;
 
-    GameGrid() {
+    public GameGrid() {
         gridTable = new boolean[20][20];
 
     }

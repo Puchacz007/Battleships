@@ -1,5 +1,6 @@
-package battleship;
+package battleship.controller;
 
+import battleship.gameObjects.GameGrid;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -33,20 +34,18 @@ public class GameSetUp {
     private int crNumber = 0, currentCruiserNumber, shipLength, shipWidth;
     private boolean dragged = false;
 
-    public void startMainGame(ActionEvent actionEvent) throws IOException {
-        if (currentCruiserNumber > 0) return;
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("main_game.fxml"));
-
-        Parent root = loader.load();
-        MainGameController mainGameController = loader.getController();
-        mainGameController.transferDataToMainGame(crNumber,playerGrid);
-
-        Scene newGameScene = new Scene(root);
-        Stage newGameStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        newGameStage.setScene(newGameScene);
-
-        newGameStage.show();
-    }
+    private final EventHandler<MouseEvent> shipOnMousePressedEventHandler
+            = new EventHandler<>() {
+        @Override
+        public void handle(MouseEvent event) {
+            if (currentCruiserNumber <= 0) return;
+            orgSceneX = event.getSceneX();
+            orgSceneY = event.getSceneY();
+            orgTranslateX = ((GridPane) event.getSource()).getTranslateX();
+            orgTranslateY = ((GridPane) event.getSource()).getTranslateY();
+            dragged = true;
+        }
+    };
 
     public void initialize() {
         cruiser.setOnMousePressed(shipOnMousePressedEventHandler);
@@ -72,24 +71,11 @@ public class GameSetUp {
         crNumber = Integer.parseInt(data);
         currentCruiserNumber=crNumber;
     }
-
-    private final EventHandler<MouseEvent> shipOnMousePressedEventHandler
-            = new EventHandler<MouseEvent>() {
-        @Override
-        public void handle(MouseEvent event) {
-            if(currentCruiserNumber<=0) return;
-            orgSceneX = event.getSceneX();
-            orgSceneY = event.getSceneY();
-            orgTranslateX = ((GridPane) event.getSource()).getTranslateX();
-            orgTranslateY = ((GridPane) event.getSource()).getTranslateY();
-            dragged = true;
-        }
-    };
     private final EventHandler<MouseEvent> shipOnMouseDraggedEventHandler =
-            new EventHandler<MouseEvent>() {
+            new EventHandler<>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    if(currentCruiserNumber<=0) return;
+                    if (currentCruiserNumber <= 0) return;
                     double offsetX = event.getSceneX() - orgSceneX;
                     double offsetY = event.getSceneY() - orgSceneY;
                     double newTranslateX = orgTranslateX + offsetX;
@@ -100,10 +86,10 @@ public class GameSetUp {
                 }
             };
     private final EventHandler<MouseEvent> shipOnMouseReleasedEventHandler =
-            new EventHandler<MouseEvent>() {
+            new EventHandler<>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    if(currentCruiserNumber<=0) return;
+                    if (currentCruiserNumber <= 0) return;
                     int x = (int) ((cruiser.getLayoutX() + event.getSceneX() - orgSceneX));
                     int y = (int) ((cruiser.getLayoutY() + event.getSceneY() - orgSceneY));
                     if (cruiser.getRotate() == 90) {
@@ -129,6 +115,21 @@ public class GameSetUp {
                     dragged = false;
                 }
             };
+
+    public void startMainGame(ActionEvent actionEvent) throws IOException {
+        if (currentCruiserNumber > 0) return;
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/main_game.fxml"));
+
+        Parent root = loader.load();
+        MainGameController mainGameController = loader.getController();
+        mainGameController.transferDataToMainGame(crNumber, playerGrid);
+
+        Scene newGameScene = new Scene(root);
+        Stage newGameStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        newGameStage.setScene(newGameScene);
+
+        newGameStage.show();
+    }
 
     private void markShip(int x, int y, int length, int width) {
         playerGrid.markShipLocation(x, y, length, width);

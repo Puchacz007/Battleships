@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <AnchorPane cacheShape="false" centerShape="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
             prefHeight="300.0" prefWidth="300.0" scaleShape="false" xmlns="http://javafx.com/javafx/8.0.172-ea"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="battleship.MainController">
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="battleship.controller.MainController">
     <GridPane centerShape="false" layoutX="100.0" layoutY="84.0" vgap="4.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="100.0"/>

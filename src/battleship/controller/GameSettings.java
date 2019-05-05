@@ -1,4 +1,4 @@
-package battleship;
+package battleship.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -15,7 +15,7 @@ public class GameSettings {
     public Label crNumber;
 
     public void startGame(ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("game_set_up.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/game_set_up.fxml"));
 
         Parent newGameParent = loader.load();
         GameSetUp gameSetUp =loader.getController() ;

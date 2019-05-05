@@ -1,4 +1,4 @@
-package battleship;
+package battleship.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -25,7 +25,7 @@ public class MainController implements Initializable {
     }
 
     public void newGame(ActionEvent actionEvent) throws IOException {
-        Parent gameSettingsParent = FXMLLoader.load(getClass().getResource("game_settings.fxml"));
+        Parent gameSettingsParent = FXMLLoader.load(getClass().getResource("view/game_settings.fxml"));
         Scene  gameSettingsScene = new Scene(gameSettingsParent);
         Stage gameSettingStage = (Stage)((Node) actionEvent.getSource()).getScene().getWindow();
         gameSettingStage.setScene(gameSettingsScene);
@@ -34,7 +34,7 @@ public class MainController implements Initializable {
     }
 
     public void loadGame(ActionEvent actionEvent)throws IOException {
-        Parent loadGameParent = FXMLLoader.load(getClass().getResource("load_game.fxml"));
+        Parent loadGameParent = FXMLLoader.load(getClass().getResource("view/load_game.fxml"));
         Scene  loadGameScene = new Scene(loadGameParent);
         Stage loadGameStage = (Stage)((Node) actionEvent.getSource()).getScene().getWindow();
         loadGameStage.setScene(loadGameScene);
