@@ -21,24 +21,173 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class GameSetUp {
+
+    private final EventHandler<MouseEvent> shipOnMouseDraggedEventHandler =
+            new EventHandler<>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    if (!dragged) return;
+
+                    double offsetX = event.getSceneX() - orgSceneX;
+                    double offsetY = event.getSceneY() - orgSceneY;
+                    double newTranslateX = orgTranslateX + offsetX;
+                    double newTranslateY = orgTranslateY + offsetY;
+
+
+                    ((GridPane) event.getSource()).setTranslateX(newTranslateX);
+                    ((GridPane) event.getSource()).setTranslateY(newTranslateY);
+                }
+            };
+    public Label capitalNr;
+    @FXML
+    public Label carrierNr;
+    @FXML
+    public Label submarineNr;
+    @FXML
+    public Label patrolNr;
+    @FXML
+    public GridPane patrol;
+    @FXML
+    public GridPane submarine;
+    @FXML
+    public GridPane capital;
     @FXML
     private GridPane cruiser;
     @FXML
-    private Label crNumberLabel;
+    public GridPane carrier;
     @FXML
     private GridPane grid;
 
     private double orgTranslateX, orgTranslateY; //dragged object translation
     private double orgSceneX, orgSceneY; // dragged object original location
     private GameGrid playerGrid;
-    private int crNumber = 0, currentCruiserNumber, shipLength, shipWidth;
+    @FXML
+    private Label cruiserNr;
+    private int crNumber, carrNumber, subNumber, capNumber, prNumber, shipLength, shipWidth;
     private boolean dragged = false;
+    private Object source;
+    private final EventHandler<MouseEvent> shipOnMouseReleasedEventHandler =
+            new EventHandler<>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    if (!dragged) return;
 
+                    int x = (int) (((GridPane) event.getSource()).getLayoutX() + event.getSceneX() - orgSceneX);
+                    int y = (int) (((GridPane) event.getSource()).getLayoutY() + event.getSceneY() - orgSceneY);
+
+                    if (((GridPane) event.getSource()).getRotate() == 90) {
+                        //   x += 30;
+                        //  y -= 30;
+
+                    }
+                    x = x / 30;
+                    y = y / 30;
+
+                    if (x >= 0 && x < 20 && y >= 0 && y < 20 && playerGrid.isAvailable(x, y, shipLength, shipWidth)) {
+
+                        if (((GridPane) event.getSource()).getRotate() == 0) markShip(x, y, shipLength, shipWidth);
+                        else markShip(x, y, shipWidth, shipLength);
+                        String text;
+                        int number;
+
+
+                        switch (shipLength) {
+                            case 1:
+                                text = patrolNr.getText();
+                                number = Integer.parseInt(text);
+                                --number;
+                                patrolNr.setText(Integer.toString(number));
+                                break;
+                            case 2:
+                                text = submarineNr.getText();
+                                number = Integer.parseInt(text);
+                                --number;
+                                submarineNr.setText(Integer.toString(number));
+                                break;
+                            case 3:
+                                if (shipWidth == 1) {
+                                    text = cruiserNr.getText();
+                                    number = Integer.parseInt(text);
+                                    --number;
+                                    cruiserNr.setText(Integer.toString(number));
+                                } else if (shipWidth == 2) {
+                                    text = carrierNr.getText();
+                                    number = Integer.parseInt(text);
+                                    --number;
+                                    carrierNr.setText(Integer.toString(number));
+                                }
+                                break;
+                            case 4:
+                                text = capitalNr.getText();
+                                number = Integer.parseInt(text);
+                                --number;
+                                capitalNr.setText(Integer.toString(number));
+                                break;
+                        }
+
+                    } else {
+                        System.out.println("bad grid drop");
+                    }
+                    ((GridPane) event.getSource()).setTranslateX(orgTranslateX);
+                    ((GridPane) event.getSource()).setTranslateY(orgTranslateY);
+
+                    if (((GridPane) event.getSource()).getRotate() == 90) rotate();
+                    dragged = false;
+                }
+            };
+    private final EventHandler<KeyEvent> setOnKeyPressed = event -> {
+
+        if (event.getCode() == KeyCode.R && dragged) {
+            rotate();
+        }
+
+    };
     private final EventHandler<MouseEvent> shipOnMousePressedEventHandler
             = new EventHandler<>() {
         @Override
         public void handle(MouseEvent event) {
-            if (currentCruiserNumber <= 0) return;
+            // if (currentCruiserNumber <= 0) return;
+
+            shipLength = ((GridPane) event.getSource()).getColumnCount();
+            shipWidth = ((GridPane) event.getSource()).getRowCount();
+            source = event.getSource();
+
+            String text;
+            int number;
+
+            switch (shipLength) {
+                case 1:
+                    text = patrolNr.getText();
+                    number = Integer.parseInt(text);
+                    if (number == 0) return;
+                    patrol.getScene().setOnKeyPressed(setOnKeyPressed);
+                    break;
+                case 2:
+                    text = submarineNr.getText();
+                    number = Integer.parseInt(text);
+                    if (number == 0) return;
+                    submarine.getScene().setOnKeyPressed(setOnKeyPressed);
+                    break;
+                case 3:
+                    if (shipWidth == 1) {
+                        text = cruiserNr.getText();
+                        number = Integer.parseInt(text);
+                        if (number == 0) return;
+                        cruiser.getScene().setOnKeyPressed(setOnKeyPressed);
+                    } else if (shipWidth == 2) {
+                        text = carrierNr.getText();
+                        number = Integer.parseInt(text);
+                        if (number == 0) return;
+                        carrier.getScene().setOnKeyPressed(setOnKeyPressed);
+                    }
+                    break;
+                case 4:
+                    text = capitalNr.getText();
+                    number = Integer.parseInt(text);
+                    if (number == 0) return;
+                    capital.getScene().setOnKeyPressed(setOnKeyPressed);
+                    break;
+            }
             orgSceneX = event.getSceneX();
             orgSceneY = event.getSceneY();
             orgTranslateX = ((GridPane) event.getSource()).getTranslateX();
@@ -46,83 +195,67 @@ public class GameSetUp {
             dragged = true;
         }
     };
+    private int shipNumber = 0;
 
     public void initialize() {
+
+
         cruiser.setOnMousePressed(shipOnMousePressedEventHandler);
         cruiser.setOnMouseDragged(shipOnMouseDraggedEventHandler);
         cruiser.setOnMouseReleased(shipOnMouseReleasedEventHandler);
+
+        capital.setOnMousePressed(shipOnMousePressedEventHandler);
+        capital.setOnMouseDragged(shipOnMouseDraggedEventHandler);
+        capital.setOnMouseReleased(shipOnMouseReleasedEventHandler);
+
+        patrol.setOnMousePressed(shipOnMousePressedEventHandler);
+        patrol.setOnMouseDragged(shipOnMouseDraggedEventHandler);
+        patrol.setOnMouseReleased(shipOnMouseReleasedEventHandler);
+
+        carrier.setOnMousePressed(shipOnMousePressedEventHandler);
+        carrier.setOnMouseDragged(shipOnMouseDraggedEventHandler);
+        carrier.setOnMouseReleased(shipOnMouseReleasedEventHandler);
+
+        submarine.setOnMousePressed(shipOnMousePressedEventHandler);
+        submarine.setOnMouseDragged(shipOnMouseDraggedEventHandler);
+        submarine.setOnMouseReleased(shipOnMouseReleasedEventHandler);
+
         playerGrid = new GameGrid();
-        shipWidth = 1;
-        shipLength = 3;
+
 
     }
 
     private void rotate() {
 
-        if (cruiser.getRotate() == 0) cruiser.setRotate(90);
-        else cruiser.setRotate(0);
-        int temp = shipLength;
-        shipLength = shipWidth;
-        shipWidth = temp;
+        if (((GridPane) source).getRotate() == 0) ((GridPane) source).setRotate(90);
+        else ((GridPane) source).setRotate(0);
     }
 
-    void transferDataToSetUp(String data) {
-        crNumberLabel.setText(data);
-        crNumber = Integer.parseInt(data);
-        currentCruiserNumber=crNumber;
+    void transferDataToSetUp(String crData, String carrData, String subData, String capData, String prData) {
+        cruiserNr.setText(crData);
+        crNumber = Integer.parseInt(crData);
+
+        carrierNr.setText(carrData);
+        carrNumber = Integer.parseInt(carrData);
+
+        submarineNr.setText(subData);
+        subNumber = Integer.parseInt(subData);
+
+        capitalNr.setText(capData);
+        capNumber = Integer.parseInt(capData);
+
+        patrolNr.setText(prData);
+        prNumber = Integer.parseInt(prData);
+        shipNumber = crNumber + carrNumber + subNumber + capNumber + prNumber;
     }
-    private final EventHandler<MouseEvent> shipOnMouseDraggedEventHandler =
-            new EventHandler<>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    if (currentCruiserNumber <= 0) return;
-                    double offsetX = event.getSceneX() - orgSceneX;
-                    double offsetY = event.getSceneY() - orgSceneY;
-                    double newTranslateX = orgTranslateX + offsetX;
-                    double newTranslateY = orgTranslateY + offsetY;
-                    cruiser.getScene().setOnKeyPressed(setOnKeyPressed);
-                    ((GridPane) event.getSource()).setTranslateX(newTranslateX);
-                    ((GridPane) event.getSource()).setTranslateY(newTranslateY);
-                }
-            };
-    private final EventHandler<MouseEvent> shipOnMouseReleasedEventHandler =
-            new EventHandler<>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    if (currentCruiserNumber <= 0) return;
-                    int x = (int) ((cruiser.getLayoutX() + event.getSceneX() - orgSceneX));
-                    int y = (int) ((cruiser.getLayoutY() + event.getSceneY() - orgSceneY));
-                    if (cruiser.getRotate() == 90) {
-                        x += 30;
-                        y -= 30;
-                    }
-                    x = x / 30;
-                    y = y / 30;
-
-                    if (x >= 0 && x < 20 && y >= 0 && y < 20 && playerGrid.isAvailable(x, y, shipLength, shipWidth)) {
-
-                        markShip(x, y, shipLength, shipWidth);
-                        currentCruiserNumber--;
-                        crNumberLabel.setText(Integer.toString(currentCruiserNumber));
-                    } else {
-                        System.out.println("bad grid drop");
-                    }
-
-                    ((GridPane) event.getSource()).setTranslateX(orgTranslateX);
-                    ((GridPane) event.getSource()).setTranslateY(orgTranslateY);
-
-                    if (cruiser.getRotate() == 90) rotate();
-                    dragged = false;
-                }
-            };
 
     public void startMainGame(ActionEvent actionEvent) throws IOException {
-        if (currentCruiserNumber > 0) return;
+        //if (currentCruiserNumber > 0) return;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("view/main_game.fxml"));
 
         Parent root = loader.load();
         MainGameController mainGameController = loader.getController();
-        mainGameController.transferDataToMainGame(crNumber, playerGrid);
+        mainGameController.transferDataToMainGame(prNumber, subNumber, crNumber, carrNumber, capNumber, playerGrid);
 
         Scene newGameScene = new Scene(root);
         Stage newGameStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -132,7 +265,7 @@ public class GameSetUp {
     }
 
     private void markShip(int x, int y, int length, int width) {
-        playerGrid.markShipLocation(x, y, length, width);
+        playerGrid.addShip(x, y, length, width);
         Pane pane;
         for (int i = 0; i < length; i++) {
             for (int j = 0; j < width; j++) {
@@ -146,12 +279,6 @@ public class GameSetUp {
             }
         }
     }
-
-    private final EventHandler<KeyEvent> setOnKeyPressed = event -> {
-
-        if (event.getCode() == KeyCode.R && dragged)
-            rotate();
-    };
 
 
 

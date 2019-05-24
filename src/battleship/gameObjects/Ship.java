@@ -1,31 +1,29 @@
 package battleship.gameObjects;
 
-class Ship {
+public class Ship {
 
 
-    Ship(int l,int w,int x,int y)
+    private final int length;
+    private final int width;
+
+    public Ship(int l, int w)
     {
         length = l;
-    width= w ;
-    xHeadLocation = x;
-    yHeadLocation = y;
+        width = w;
         hitpoints = length * width;
     }
 
-    final int length;
-    final int width;
-    final int xHeadLocation;
-    final int yHeadLocation;
+
 
     private int hitpoints;
 
-
-public  boolean isDestroyed()
+    public boolean isDestroyed()
 {
     return hitpoints <= 0;
 }
-public void isHit()
+
+    public void wasHit()
     {
-        hitpoints--;
+        --hitpoints;
     }
 }

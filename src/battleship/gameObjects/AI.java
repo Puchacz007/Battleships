@@ -4,7 +4,6 @@ import java.util.Random;
 
 public class AI {
     private final GameGrid shipsGrid;
-
     public AI()
     {
         shipsGrid = new GameGrid();
@@ -19,7 +18,7 @@ public class AI {
         Random random = new Random();
         return   random.nextInt(20);
     }*/
-    public  void setUpShips(int crNumber)
+  public void setUpShips(int prNumber, int subNumber, int crNumber, int carrNumber, int capNumber)
     {
         int targetX;
         int targetY;
@@ -52,7 +51,8 @@ public class AI {
             }
             while (!shipsGrid.isAvailable(targetX, targetY, length, width));
 
-            shipsGrid.markShipLocation(targetX, targetY, length, width);
+            shipsGrid.addShip(targetX, targetY, length, width);
+
         }
 
     }

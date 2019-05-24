@@ -12,6 +12,7 @@ import javafx.scene.layout.Pane;
 
 public class MainGameController {
 
+    private static final int GRIDSIZE = 20;
     @FXML
     private ImageView target; // target symbol
     @FXML
@@ -19,7 +20,7 @@ public class MainGameController {
     @FXML
     private GridPane yourGrid; // grid to see computer shoot
 
-    private int playerCrNumber,computerCrNumber;
+    //  private int playerCrNumber,computerCrNumber;
     private int targetX,targetY;
     private GameGrid computerTargetGrid;
     private AI computer;
@@ -32,15 +33,15 @@ public class MainGameController {
 
         GridPane.setHalignment(target, HPos.CENTER);
         GridPane.setValignment(target, VPos.CENTER);
-        playerAlreadyShoot = new boolean[20][20];
-        computerAlreadyShoot = new boolean[20][20];
+        playerAlreadyShoot = new boolean[GRIDSIZE][GRIDSIZE];
+        computerAlreadyShoot = new boolean[GRIDSIZE][GRIDSIZE];
     }
 
-    void transferDataToMainGame(int crNumber,GameGrid playerGrid)
+    void transferDataToMainGame(int prNumber, int subNumber, int crNumber, int carrNumber, int capNumber, GameGrid playerGrid)
     {
-        playerCrNumber=crNumber;
-        computerCrNumber=crNumber;
-        computer.setUpShips(computerCrNumber);
+        //playerCrNumber=crNumber;
+        // computerCrNumber=crNumber;
+        computer.setUpShips(prNumber, subNumber, crNumber, carrNumber, capNumber);
         computerTargetGrid = playerGrid;
     }
 
@@ -80,6 +81,8 @@ public class MainGameController {
             {
                 pane.setStyle("-fx-background-color: red;");
                 grid.add(pane,targetX,targetY);
+
+                //if(computer.getGrid().)
 
 
             }else

@@ -11,15 +11,20 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class GameSettings {
-
+    private static final int MAXSHIPSNUMBER = 20;
+    public Label carrNumber;
     public Label crNumber;
+    public Label subNumber;
+    public Label capNumber;
+    public Label prNumber;
+    private int currentShipNumber = 0;
 
     public void startGame(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("view/game_set_up.fxml"));
 
         Parent newGameParent = loader.load();
         GameSetUp gameSetUp =loader.getController() ;
-        gameSetUp.transferDataToSetUp(crNumber.getText());
+        gameSetUp.transferDataToSetUp(crNumber.getText(), carrNumber.getText(), subNumber.getText(), capNumber.getText(), prNumber.getText());
 
 
 
@@ -36,12 +41,18 @@ public class GameSettings {
     }
   
     private int increase(int i) {
-        ++i;
+        if (currentShipNumber <= MAXSHIPSNUMBER) {
+            ++i;
+            ++currentShipNumber;
+        }
         return i;
     }
 
     private int decrease(int i) {
-        if (i > 0) --i;
+        if (i > 0) {
+            --i;
+            --currentShipNumber;
+        }
         return i;
     }
     private void counter(Label label,boolean operation) //0 - decrease 1 - increase
@@ -59,5 +70,37 @@ public class GameSettings {
 
     public void decreaseCruiser() {
         counter(crNumber,false);
+    }
+
+    public void increaseCarrier() {
+        counter(carrNumber, true);
+    }
+
+    public void decreaseCarrier() {
+        counter(carrNumber, false);
+    }
+
+    public void decreaseSub() {
+        counter(subNumber, false);
+    }
+
+    public void increaseSub() {
+        counter(subNumber, true);
+    }
+
+    public void decreaseCapital() {
+        counter(capNumber, false);
+    }
+
+    public void increaseCapital() {
+        counter(capNumber, true);
+    }
+
+    public void decreasePatrol() {
+        counter(prNumber, false);
+    }
+
+    public void increasePatrol() {
+        counter(prNumber, true);
     }
 }
