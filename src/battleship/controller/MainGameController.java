@@ -2,9 +2,11 @@ package battleship.controller;
 
 import battleship.gameObjects.AI;
 import battleship.gameObjects.GameGrid;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
+import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -82,7 +84,20 @@ public class MainGameController {
                 pane.setStyle("-fx-background-color: red;");
                 grid.add(pane,targetX,targetY);
 
-                //if(computer.getGrid().)
+                if(computer.getGrid().isDestroyed(targetX,targetY))
+                {
+                    int[] targetArray = computer.getGrid().wasDestroyed(targetX, targetY);
+                    for(int i=0;i<targetArray[2];i++)
+                    {
+                        for(int j=0;j<targetArray[3];j++)
+                        {
+                           Node node =getNodeByRowColumnIndex(targetArray[0]+i,targetArray[1]+j,grid);
+                            node.setStyle("-fx-background-color: black;");
+
+
+                        }
+                    }
+                }
 
 
             }else
@@ -108,11 +123,26 @@ public class MainGameController {
             {
                 pane.setStyle("-fx-background-color: red;");
                 yourGrid.add(pane,targetX,targetY);
+                if(computerTargetGrid.isDestroyed(targetX,targetY))
+                {
+                    int[] targetArray = computerTargetGrid.wasDestroyed(targetX, targetY);
+                    for(int i=0;i<targetArray[2];i++)
+                    {
+                        for(int j=0;j<targetArray[3];j++)
+                        {
+                            Node node =getNodeByRowColumnIndex(targetArray[0]+i,targetArray[1]+j,yourGrid);
+                            node.setStyle("-fx-background-color: black;");
+
+
+                        }
+                    }
+                }
             }else
             {
                 pane.setStyle("-fx-background-color: Cyan;");
                 yourGrid.add(pane,targetX,targetY);
             }
+
             computerAlreadyShoot[targetX][targetY] = true;
             targetX = -1;
             targetY = -1;
@@ -160,5 +190,18 @@ public class MainGameController {
                    }
                }
            }
+    }
+    public Node getNodeByRowColumnIndex (final int row, final int column, GridPane gridPane) {
+        Node result = null;
+        ObservableList<Node> childrens = gridPane.getChildren();
+
+        for (Node node : childrens) {
+            if(GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == column) {
+                result = node;
+                break;
+            }
+        }
+
+        return result;
     }
 }

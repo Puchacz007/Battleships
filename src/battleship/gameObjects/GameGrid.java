@@ -1,5 +1,6 @@
 package battleship.gameObjects;
 
+import java.awt.*;
 import java.util.Vector;
 
 public class GameGrid {
@@ -30,7 +31,21 @@ public class GameGrid {
         } else return false;
 
     }
-
+    public boolean isDestroyed(int x,int y)
+    {
+        int shipId = gridTable[x][y];
+        return shipsVector.get(shipId).isDestroyed();
+    }
+    public int[] wasDestroyed(int x,int y)
+    {
+        int shipId = gridTable[x][y];
+        int[] returnArray = new int[4];
+        returnArray[0]=shipsVector.get(shipId).getxHead();
+        returnArray[1]=shipsVector.get(shipId).getyHead();
+        returnArray[2]=shipsVector.get(shipId).getLength();
+        returnArray[3]=shipsVector.get(shipId).getWidth();
+        return returnArray;
+    }
 
     public boolean isAvailable(int x, int y, int length, int width) {
 
@@ -70,7 +85,7 @@ public class GameGrid {
     }
 
     public void addShip(int x, int y, int length, int width) {
-        shipsVector.addElement(new Ship(length, width));
+        shipsVector.addElement(new Ship(x,y,length, width));
         markShipLocation(x, y, length, width);
     }
 }
