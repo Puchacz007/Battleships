@@ -147,8 +147,8 @@ public class MainGameController {
             playerAlreadyShoot[targetX][targetY] = true;
 
             do {
-                targetX = computer.chooseTarget(20);
-                targetY = computer.chooseTarget(20);
+                targetX = computer.randomInt(20);
+                targetY = computer.randomInt(20);
             }
             while (computerAlreadyShoot[targetX][targetY]);
             pane = (Pane) yourGrid.getChildren().get(targetY * 20 + targetX);

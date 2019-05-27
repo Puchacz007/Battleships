@@ -18,7 +18,8 @@ public class AI {
         hits = new Vector<>();
         shipsGrid = new GameGrid();
     }
-    public int chooseTarget(int bound)
+
+    public int randomInt(int bound)
     {
         Random random = new Random();
       return   random.nextInt(bound);
@@ -35,10 +36,10 @@ public class AI {
             hits.addElement(lastShot);
             if (hits.size() == 1) {
                 do {
-                    Random random = new Random();
-                    x = random.nextInt(4);
-                    random = new Random();
-                    y = random.nextInt(4);
+
+                    x = randomInt(4);
+
+                    y = randomInt(4);
 
                     x += lastShot.getX();
                     y += lastShot.getY();
@@ -65,10 +66,8 @@ public class AI {
                 }
             }
         } else if (hits.isEmpty()) {
-            Random random = new Random();
-            x = random.nextInt(bound);
-            random = new Random();
-            y = random.nextInt(bound);
+            x = randomInt(bound);
+            y = randomInt(bound);
             lastShot.setLocation(x, y);
         } else {
 
@@ -87,37 +86,86 @@ public class AI {
         int targetX;
         int targetY;
         int errorExit=0;
-        int length;
-        int width;
+        int length = -1;
+        int width = -1;
         int temp;
-        for(int i = 0;i<crNumber;i++) {
+        int size = prNumber + subNumber + crNumber + carrNumber + capNumber;
+        int shipType = -1;//-1=no ship,0=patrol,1=sub,2=cruiser,3=carrier,4=capital
 
-            do {
-               errorExit++;
-                targetX = chooseTarget(18);
-                targetY = chooseTarget(18);
-                if(chooseRotation())
-                {
+
+        while (size > 0) {
+            int bound = 0;
+            if (prNumber > 0) ++bound;
+            if (subNumber > 0) ++bound;
+            if (crNumber > 0) ++bound;
+            if (carrNumber > 0) ++bound;
+            if (capNumber > 0) ++bound;
+            shipType = randomInt(bound);
+
+            switch (shipType) {
+                case 0:
+                    length = 1;
+                    width = 1;
+
+                    if (prNumber > 0) {
+                        --prNumber;
+                        break;
+                    }
+                case 1:
+                    length = 2;
+                    width = 1;
+                    if (subNumber > 0) {
+                        --subNumber;
+                        break;
+                    }
+                case 2:
                     length = 3;
                     width=1;
-                }else
-                {
-                    width=3;
-                    length = 1;
+                    if (crNumber > 0) {
+                        --crNumber;
+                        break;
+                    }
+                case 3:
+                    length = 3;
+                    width = 2;
+                    if (carrNumber > 0) {
+                        --carrNumber;
+                        break;
+                    }
+                case 4:
+                    length = 4;
+                    width = 1;
+                    if (capNumber > 0) {
+                        --capNumber;
+                        break;
+                    }
+                    break;
+            }
+            //   for(int i = 0;i<crNumber;i++) {
+
+            do {
+                errorExit++;
+                targetX = randomInt(18);
+                targetY = randomInt(18);
+                if (!chooseRotation()) {
+                    temp = width;
+                    width = length;
+                    length = temp;
                 }
                 if (shipsGrid.isAvailable(targetX, targetY, length, width)) break;
                 temp = length;
                 length = width;
-                width=temp;
+                width = temp;
 
-                if (errorExit==1000000)return;
+                if (errorExit == 1000000) return;
 
             }
             while (!shipsGrid.isAvailable(targetX, targetY, length, width));
 
             shipsGrid.addShip(targetX, targetY, length, width);
-
+            --size;
         }
+        //}
 
     }
 
@@ -130,5 +178,6 @@ public class AI {
     {
         return  shipsGrid;
     }
+    
 
 }
