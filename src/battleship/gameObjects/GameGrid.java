@@ -1,6 +1,5 @@
 package battleship.gameObjects;
 
-import java.awt.*;
 import java.util.Vector;
 
 public class GameGrid {
@@ -8,7 +7,6 @@ public class GameGrid {
 
     private static final int GRIDSIZE = 20;
     private static final int EMPTY = -1;
-    private static final int MISS = -2;
     private final int[][] gridTable;
     private int id = 0;
     private Vector<Ship> shipsVector = new Vector<>();
@@ -87,5 +85,9 @@ public class GameGrid {
     public void addShip(int x, int y, int length, int width) {
         shipsVector.addElement(new Ship(x,y,length, width));
         markShipLocation(x, y, length, width);
+    }
+
+    public int[][] getGridTable() {
+        return gridTable;
     }
 }

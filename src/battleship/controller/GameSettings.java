@@ -41,7 +41,7 @@ public class GameSettings {
     }
   
     private int increase(int i) {
-        if (currentShipNumber <= MAXSHIPSNUMBER) {
+        if (currentShipNumber < MAXSHIPSNUMBER) {
             ++i;
             ++currentShipNumber;
         }
