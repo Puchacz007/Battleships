@@ -10,6 +10,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
+import java.awt.*;
+
 public class MainGameController {
 
     private static final int GRIDSIZE = 20;
@@ -27,6 +29,7 @@ public class MainGameController {
     private AI computer;
     private boolean[][] playerAlreadyShoot;
     private boolean[][] computerAlreadyShoot;
+    private boolean wasDestroyed = false, wasHit = false;
     public void initialize()
     {
       computerTargetGrid=new GameGrid();
@@ -145,25 +148,32 @@ public class MainGameController {
 
             }
             playerAlreadyShoot[targetX][targetY] = true;
+            //   int iteration=0;
 
-            do {
-                targetX = computer.randomInt(20);
-                targetY = computer.randomInt(20);
-            }
-            while (computerAlreadyShoot[targetX][targetY]);
+            //  targetX = computer.randomInt(20);
+            //  targetY = computer.randomInt(20);
+            Point target = computer.chooseTarget(wasHit, wasDestroyed, computerAlreadyShoot);
+            targetX = (int) target.getX();
+            targetY = (int) target.getY();
+            // ++iteration;
+
+            //  while (computerAlreadyShoot[targetX][targetY]);
             pane = (Pane) yourGrid.getChildren().get(targetY * 20 + targetX);
-
+            wasDestroyed = false;
+            wasHit = false;
             //  pane.setPrefSize(14,14);
             //  pane.setMaxSize(14,14);
             //  GridPane.setHalignment(pane, HPos.CENTER);
             //   GridPane.setValignment(pane, VPos.CENTER);
             if(computerTargetGrid.isHit(targetX,targetY))
             {
+                wasHit = true;
                 pane.setStyle("-fx-background-color: red;");
                 // yourGrid.add(pane,targetX,targetY);
                 if(computerTargetGrid.isDestroyed(targetX,targetY))
                 {
-                    int[] targetArray = computer.getGrid().wasDestroyed(targetX, targetY);
+                    wasDestroyed = true;
+                    int[] targetArray = computerTargetGrid.wasDestroyed(targetX, targetY);
                     for(int i=0;i<targetArray[2];i++)
                     {
                         if (targetArray[1] != 0) {
