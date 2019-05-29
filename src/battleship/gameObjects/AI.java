@@ -7,10 +7,10 @@ import java.util.Vector;
 public class AI {
     private static final int GRIDSIZE = 20;
     int targetLength = 0, targetWidth = 0;
-    boolean direction = false; //false change length,true change width
+    //  boolean direction = false; //false change length,true change width
     private final GameGrid shipsGrid;
-    private int maxShipLength = 3;
-    private int maxShipWidth = 2;
+    // private int maxShipLength = 3;
+    //   private int maxShipWidth = 2;
     private boolean targetFound = false;
     private Point lastShot, potentialHit;
     private Vector<Point> potentialHits;
@@ -30,8 +30,8 @@ public class AI {
       return   random.nextInt(bound);
     }
 
-    public Point chooseTarget(boolean wasHit, boolean wasDestroyed, boolean[][] alreadyShoot) {
-        int x, y;
+    public Point chooseTarget(boolean wasHit, boolean wasDestroyed, boolean[][] alreadyShoot, int maxShipLength, int maxShipWidth) {
+        int x, y, number;
         if (wasDestroyed) { //last shoot destroyed targeted ship
             potentialHits.removeAllElements();
             hits.removeAllElements();
@@ -86,83 +86,93 @@ public class AI {
             hits.addElement(lastShot);
             targetLength = 1;
             targetWidth = 1;
-            int number = randomInt(potentialHits.size() - 1);
+            if (potentialHits.size() != 1) number = randomInt(potentialHits.size() - 1);
+            else number = 0;
             lastShot = potentialHits.get(number);
-            if (x != lastShot.getX()) direction = false;
-            if (y != lastShot.getY()) direction = true;
+            //   if (x != lastShot.getX()) direction = false;
+            //  if (y != lastShot.getY()) direction = true;
             return lastShot;
         }
         if (!wasHit && !potentialHits.isEmpty() && targetFound)//last shoot was a miss but there is a target
         {
             potentialHits.remove(lastShot);
-            int number = randomInt(potentialHits.size() - 1);
+            if (potentialHits.size() != 1) number = randomInt(potentialHits.size() - 1);
+            else number = 0;
             lastShot = potentialHits.get(number);
             return lastShot;
         }
 
         if (wasHit && !potentialHits.isEmpty() && targetFound) //last shoot was a hit and there is a target
         {
-            if (direction) ++targetWidth;
-            else ++targetLength;
             hits.addElement(lastShot);
             x = (int) lastShot.getX();
             y = (int) lastShot.getY();
+            Vector<Integer> yVector = new Vector<>(maxShipWidth);
+            for (Point hit : hits) {
+                number = (int) hit.getY();
+                if (!yVector.contains(number)) yVector.add(number);
+            }
+            Vector<Integer> xVector = new Vector<>(maxShipLength);
+            for (Point hit : hits) {
+                number = (int) hit.getX();
+                if (!xVector.contains(number)) xVector.add(number);
+            }
+            targetLength = xVector.size();
+            targetWidth = yVector.size();
+
+            // if (direction) ++targetWidth;
+            // else ++targetLength;
+
             potentialHit = new Point(x + 1, y);
-            if (!potentialHits.contains(potentialHit) && !hits.contains(potentialHit) && x + 1 < GRIDSIZE && !alreadyShoot[x + 1][y] && maxShipLength != targetLength) {
+            if (!potentialHits.contains(potentialHit) && !hits.contains(potentialHit) && x + 1 < GRIDSIZE && !alreadyShoot[x + 1][y]) {
 
                 potentialHits.addElement(potentialHit);
             }
             potentialHit = new Point(x - 1, y);
-            if (!potentialHits.contains(potentialHit) && !hits.contains(potentialHit) && x - 1 >= 0 && !alreadyShoot[x - 1][y] && maxShipLength != targetLength) {
+            if (!potentialHits.contains(potentialHit) && !hits.contains(potentialHit) && x - 1 >= 0 && !alreadyShoot[x - 1][y]) {
 
                 potentialHits.addElement(potentialHit);
             }
             potentialHit = new Point(x, y + 1);
-            if (!potentialHits.contains(potentialHit) && !hits.contains(potentialHit) && y + 1 < GRIDSIZE && !alreadyShoot[x][y + 1] && maxShipWidth != targetWidth) {
+            if (!potentialHits.contains(potentialHit) && !hits.contains(potentialHit) && y + 1 < GRIDSIZE && !alreadyShoot[x][y + 1]) {
 
                 potentialHits.addElement(potentialHit);
             }
             potentialHit = new Point(x, y - 1);
-            if (!potentialHits.contains(potentialHit) && !hits.contains(potentialHit) && y - 1 >= 0 && !alreadyShoot[x][y - 1] && maxShipWidth != targetWidth) {
+            if (!potentialHits.contains(potentialHit) && !hits.contains(potentialHit) && y - 1 >= 0 && !alreadyShoot[x][y - 1]) {
 
                 potentialHits.addElement(potentialHit);
             }
             potentialHits.remove(lastShot);
-            if (maxShipWidth == targetWidth) {
 
-                Vector<Integer> vector = new Vector<>(maxShipWidth);
-                for (Point hit : hits) {
-                    int number = (int) hit.getY();
-                    if (!vector.contains(number)) vector.add(number);
-                }
+            if (maxShipWidth == targetWidth && targetLength > maxShipWidth) {
+
+
                 for (int i = 0; i < potentialHits.size(); i++) {
-                    int number = (int) potentialHits.get(i).getY();
-                    if (!vector.contains(number)) {
+                    number = (int) potentialHits.get(i).getY();
+                    if (!yVector.contains(number)) {
                         potentialHits.remove(i);
-                        ++i;
+                        i = 0;
                     }
                 }
             }
-            if (maxShipLength == targetLength) {
-                Vector<Integer> vector = new Vector<>(maxShipLength);
-                for (Point hit : hits) {
-                    int number = (int) hit.getX();
-                    if (!vector.contains(number)) vector.add(number);
-                }
+            if (maxShipLength == targetLength && targetWidth > maxShipLength) {
+
                 for (int i = 0; i < potentialHits.size(); i++) {
-                    int number = (int) potentialHits.get(i).getY();
-                    if (!vector.contains(number)) {
+                    number = (int) potentialHits.get(i).getY();
+                    if (!xVector.contains(number)) {
                         potentialHits.remove(i);
-                        ++i;
+                        i = 0;
                     }
                 }
             }
 
-            int number = randomInt(potentialHits.size() - 1);
+            if (potentialHits.size() != 1) number = randomInt(potentialHits.size() - 1);
+            else number = 0;
             lastShot = potentialHits.get(number);
 
-            if (x != lastShot.getX()) direction = false;
-            if (y != lastShot.getY()) direction = true;
+            //    if (x != lastShot.getX()) direction = false;
+            //     if (y != lastShot.getY()) direction = true;
 
             return lastShot;
 

@@ -9,6 +9,7 @@ public class GameGrid {
     private static final int EMPTY = -1;
     private final int[][] gridTable;
     private int id = 0;
+    private int shipsNumber = 0;
     private Vector<Ship> shipsVector = new Vector<>();
     public GameGrid() {
         gridTable = new int[GRIDSIZE][GRIDSIZE];
@@ -33,6 +34,11 @@ public class GameGrid {
     {
         int shipId = gridTable[x][y];
         return shipsVector.get(shipId).isDestroyed();
+    }
+
+    public int destroyedShipSize(int x, int y) {
+        int shipId = gridTable[x][y];
+        return shipsVector.get(shipId).getSize();
     }
     public int[] wasDestroyed(int x,int y)
     {
@@ -85,6 +91,7 @@ public class GameGrid {
     public void addShip(int x, int y, int length, int width) {
         shipsVector.addElement(new Ship(x,y,length, width));
         markShipLocation(x, y, length, width);
+
     }
 
     public int[][] getGridTable() {

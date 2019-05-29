@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="battleship.controller.LoadGame"
-            prefHeight="400.0" prefWidth="600.0">
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="300.0" prefWidth="300.0"
+            xmlns="http://javafx.com/javafx/8.0.172-ea" fx:controller="battleship.controller.LoadGame">
+    <children>
+        <Button layoutX="112.0" layoutY="246.0" mnemonicParsing="false" text="Load Game"/>
+        <ListView layoutX="51.0" layoutY="28.0" prefHeight="200.0" prefWidth="200.0"/>
+    </children>
 </AnchorPane>

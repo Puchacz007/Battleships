@@ -4,10 +4,11 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="600.0" maxWidth="1000.0" minHeight="600.0" minWidth="1000.0"
-            prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.172-ea"
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="mainWindow" maxHeight="600.0" maxWidth="1000.0" minHeight="600.0"
+            minWidth="1000.0" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.172-ea"
             fx:controller="battleship.controller.MainGameController">
-    <GridPane fx:id="grid" alignment="CENTER" gridLinesVisible="true" onMouseClicked="#setTarget" snapToPixel="false">
+    <GridPane fx:id="computerGrid" alignment="CENTER" gridLinesVisible="true" onMouseClicked="#setTarget"
+              snapToPixel="false">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0" />
@@ -1629,7 +1630,7 @@
 
         </children>
     </GridPane>
-    <Button layoutX="782.0" layoutY="529.0" mnemonicParsing="false" onAction="#fire" text="FIRE" />
+    <Button layoutX="782.0" layoutY="528.0" mnemonicParsing="false" onAction="#fire" text="FIRE"/>
     <Label layoutX="694.0" layoutY="502.0" text="Select target to fire and press the button" />
     <Label layoutX="771.0" layoutY="335.0" text="Your board" />
     <ImageView fx:id="target" fitHeight="27.0" fitWidth="27.0" layoutX="608.0" layoutY="300.0" pickOnBounds="true"
@@ -1640,5 +1641,44 @@
    <Pane layoutX="726.0" layoutY="372.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: red;" />
    <Label layoutX="768.0" layoutY="421.0" text="- Miss symbol" />
    <Label layoutX="771.0" layoutY="379.0" text="- Hit symbol" />
-   <Button layoutX="926.0" layoutY="548.0" mnemonicParsing="false" onAction="#test" text="Test" />
+    <AnchorPane fx:id="menu" layoutX="350.0" layoutY="164.0" maxHeight="300.0" maxWidth="300.0" minHeight="300.0"
+                minWidth="300.0" prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: white;"
+                visible="false">
+        <children>
+            <Button layoutX="100.0" layoutY="40.0" mnemonicParsing="false" onAction="#saveGame" prefHeight="25.0"
+                    prefWidth="100.0" text="Save Game" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="100.0"
+                    AnchorPane.rightAnchor="100.0"/>
+            <Button layoutX="100.0" layoutY="92.0" mnemonicParsing="false" onAction="#load" prefHeight="25.0"
+                    prefWidth="100.0" text="Load Game" AnchorPane.bottomAnchor="160.0" AnchorPane.leftAnchor="100.0"
+                    AnchorPane.rightAnchor="100.0"/>
+            <Button layoutX="100.0" layoutY="150.0" mnemonicParsing="false" onAction="#surrender" prefHeight="25.0"
+                    prefWidth="100.0" text="Surrender" AnchorPane.bottomAnchor="120.0" AnchorPane.leftAnchor="100.0"
+                    AnchorPane.rightAnchor="100.0"/>
+            <Button layoutX="100.0" layoutY="212.0" mnemonicParsing="false" onAction="#exit" prefHeight="25.0"
+                    prefWidth="100.0" text="Exit" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="100.0"
+                    AnchorPane.rightAnchor="100.0"/>
+        </children>
+    </AnchorPane>
+    <AnchorPane fx:id="endgameScreen" layoutX="644.0" layoutY="368.0" prefHeight="219.0" prefWidth="320.0"
+                style="-fx-background-color: white;" visible="false">
+        <children>
+            <Label fx:id="result" alignment="CENTER" layoutX="35.0" layoutY="70.0" prefHeight="50.0" prefWidth="250.0"
+                   text="Victory" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0"
+                   AnchorPane.topAnchor="10.0"/>
+            <Label fx:id="shotsFired" alignment="CENTER" layoutX="45.0" layoutY="30.0" prefHeight="50.0"
+                   prefWidth="250.0" text="Shots Fired" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0"
+                   AnchorPane.topAnchor="40.0"/>
+            <Label fx:id="hits" alignment="CENTER" layoutX="35.0" layoutY="70.0" prefHeight="50.0" prefWidth="250.0"
+                   text="Hits" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="70.0"/>
+            <Label fx:id="misses" alignment="CENTER" layoutX="35.0" layoutY="110.0" prefHeight="50.0" prefWidth="250.0"
+                   text="Misses" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0"
+                   AnchorPane.topAnchor="100.0"/>
+            <Label fx:id="accuracy" alignment="CENTER" layoutX="35.0" layoutY="144.0" prefHeight="50.0"
+                   prefWidth="250.0" text="Accuracy = 70%" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0"
+                   AnchorPane.topAnchor="130.0"/>
+            <Button layoutX="120.0" layoutY="160.0" mnemonicParsing="false" onAction="#exit" prefHeight="25.0"
+                    prefWidth="80.0" text="Exit" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0"
+                    AnchorPane.topAnchor="180.0"/>
+        </children>
+    </AnchorPane>
 </AnchorPane>
