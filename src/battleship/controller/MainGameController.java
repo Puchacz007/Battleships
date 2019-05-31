@@ -29,7 +29,7 @@ public class MainGameController {
     public AnchorPane mainWindow;
     @FXML
     private ImageView target; // target symbol
-    boolean endgame = false;
+    private boolean endgame = false;
     @FXML
     private GridPane computerGrid; //computerGrid to choose target and see result of shoot
     @FXML
@@ -37,9 +37,7 @@ public class MainGameController {
     @FXML
     private AnchorPane menu;
 
-
-
-    //  private int playerCrNumber,computerCrNumber;
+    
     private int targetX,targetY;
     private GameGrid computerTargetGrid;
     private AI computer;
@@ -125,21 +123,10 @@ public class MainGameController {
         if(target.isVisible()) {
             target.setVisible(false);
             computerGrid.getChildren().remove(target);
-
-            //Node node =  getNodeByRowColumnIndex(targetX,targetY,computerGrid);
-
-
-            //  Pane pane =new Pane();
-            // pane.setPrefSize(27,27);
-            //pane.setMaxSize(27,27);
-            //GridPane.setHalignment(pane, HPos.CENTER);
-            //GridPane.setValignment(pane, VPos.CENTER);
             Pane pane = (Pane) computerGrid.getChildren().get(targetY * GRIDSIZE + targetX);
             if (computer.getGrid().isHit(targetX,targetY))
             {
-                pane.setStyle("-fx-background-color: red;");
-                //  pane.setStyle("-fx-background-color: red;");
-                // computerGrid.add(pane,targetX,targetY);
+                pane.setStyle("-fx-background-color: red;-fx-border-color: black;");
                 ++numberOfHits;
                 if(computer.getGrid().isDestroyed(targetX,targetY))
                 {
@@ -151,14 +138,12 @@ public class MainGameController {
                         if (targetArray[1] != 0) {
                             pane = (Pane) computerGrid.getChildren().get((targetArray[1] - 1) * GRIDSIZE + targetArray[0] + i);
                             playerAlreadyShoot[targetArray[0] + i][targetArray[1] - 1] = true;
-                            pane.setStyle("-fx-background-color: cyan;");
+                            pane.setStyle("-fx-background-color: cyan;-fx-border-color: black;");
                         }
                         for (j = 0; j < targetArray[3]; j++)
                         {
-                            //node =getNodeByRowColumnIndex(targetArray[0]+i,targetArray[1]+j,computerGrid);
-
                             pane = (Pane) computerGrid.getChildren().get((targetArray[1] + j) * GRIDSIZE + targetArray[0] + i);
-                            pane.setStyle("-fx-background-color: black;");
+                            pane.setStyle("-fx-background-color: black;-fx-border-color: black;");
 
 
                         }
@@ -167,7 +152,7 @@ public class MainGameController {
                                 if (targetArray[1] == 0 && k == -1) ++k;
                                 if (targetArray[1] + targetArray[3] == GRIDSIZE && k == targetArray[3]) break;
                                 pane = (Pane) computerGrid.getChildren().get((targetArray[1] + k) * GRIDSIZE + targetArray[0] - 1);
-                                pane.setStyle("-fx-background-color: cyan;");
+                                pane.setStyle("-fx-background-color: cyan;-fx-border-color: black;");
                                 playerAlreadyShoot[targetArray[0] - 1][targetArray[1] + k] = true;
                             }
                         }
@@ -176,13 +161,13 @@ public class MainGameController {
                                 if (targetArray[1] == 0 && k == -1) ++k;
                                 if (targetArray[1] + targetArray[3] == GRIDSIZE && k == targetArray[3]) break;
                                 pane = (Pane) computerGrid.getChildren().get((targetArray[1] + k) * GRIDSIZE + targetArray[0] + targetArray[2]);
-                                pane.setStyle("-fx-background-color: cyan;");
+                                pane.setStyle("-fx-background-color: cyan;-fx-border-color: black;");
                                 playerAlreadyShoot[targetArray[0] + targetArray[2]][targetArray[1] + k] = true;
                             }
                         }
                         if (targetArray[1] + targetArray[3] != GRIDSIZE) {
                             pane = (Pane) computerGrid.getChildren().get((targetArray[1] + targetArray[3]) * GRIDSIZE + targetArray[0] + i);
-                            pane.setStyle("-fx-background-color: cyan;");
+                            pane.setStyle("-fx-background-color: cyan;-fx-border-color: black;");
                             playerAlreadyShoot[targetArray[0] + i][targetArray[1] + targetArray[3]] = true;
                         }
                     }
@@ -191,17 +176,11 @@ public class MainGameController {
 
             }else
             {
-                pane.setStyle("-fx-background-color: Cyan;");
-                // pane.setStyle("-fx-background-color: Cyan;");
-                //computerGrid.add(pane,targetX,targetY);
+                pane.setStyle("-fx-background-color: Cyan;-fx-border-color: black;");
 
             }
             ++numberOfPlayerShoots;
             playerAlreadyShoot[targetX][targetY] = true;
-            //   int iteration=0;
-
-            //  targetX = computer.randomInt(20);
-            //  targetY = computer.randomInt(20);
             int maxWidth, maxLength;
             if (playerShipsTypeNumber[4] > 0) maxWidth = 2;
             else maxWidth = 1;
@@ -214,20 +193,13 @@ public class MainGameController {
             Point target = computer.chooseTarget(wasHit, wasDestroyed, computerAlreadyShoot, maxLength, maxWidth);
             targetX = (int) target.getX();
             targetY = (int) target.getY();
-            // ++iteration;
-
-            //  while (computerAlreadyShoot[targetX][targetY]);
             pane = (Pane) yourGrid.getChildren().get(targetY * GRIDSIZE + targetX);
             wasDestroyed = false;
             wasHit = false;
-            //  pane.setPrefSize(14,14);
-            //  pane.setMaxSize(14,14);
-            //  GridPane.setHalignment(pane, HPos.CENTER);
-            //   GridPane.setValignment(pane, VPos.CENTER);
             if(computerTargetGrid.isHit(targetX,targetY))
             {
                 wasHit = true;
-                pane.setStyle("-fx-background-color: red;");
+                pane.setStyle("-fx-background-color: red;-fx-border-color: black;");
                 // yourGrid.add(pane,targetX,targetY);
                 if(computerTargetGrid.isDestroyed(targetX,targetY))
                 {
@@ -257,13 +229,12 @@ public class MainGameController {
                         if (targetArray[1] != 0) {
                             pane = (Pane) yourGrid.getChildren().get((targetArray[1] - 1) * GRIDSIZE + targetArray[0] + i);
                             computerAlreadyShoot[targetArray[0] + i][targetArray[1] - 1] = true;
-                            pane.setStyle("-fx-background-color: cyan;");
+                            pane.setStyle("-fx-background-color: cyan;-fx-border-color: black;");
                         }
                         for(int j=0;j<targetArray[3];j++) {
-                            //node =getNodeByRowColumnIndex(targetArray[0]+i,targetArray[1]+j,computerGrid);
 
                             pane = (Pane) yourGrid.getChildren().get((targetArray[1] + j) * GRIDSIZE + targetArray[0] + i);
-                            pane.setStyle("-fx-background-color: black;");
+                            pane.setStyle("-fx-background-color: black;-fx-border-color: black;");
 
 
                         }
@@ -272,7 +243,7 @@ public class MainGameController {
                                 if (targetArray[1] == 0 && k == -1) ++k;
                                 if (targetArray[1] + targetArray[3] == GRIDSIZE && k == targetArray[3]) break;
                                 pane = (Pane) yourGrid.getChildren().get((targetArray[1] + k) * GRIDSIZE + targetArray[0] - 1);
-                                pane.setStyle("-fx-background-color: cyan;");
+                                pane.setStyle("-fx-background-color: cyan;-fx-border-color: black;");
                                 computerAlreadyShoot[targetArray[0] - 1][targetArray[1] + k] = true;
                             }
                         }
@@ -281,21 +252,20 @@ public class MainGameController {
                                 if (targetArray[1] == 0 && k == -1) ++k;
                                 if (targetArray[1] + targetArray[3] == GRIDSIZE && k == targetArray[3]) break;
                                 pane = (Pane) yourGrid.getChildren().get((targetArray[1] + k) * GRIDSIZE + targetArray[0] + targetArray[2]);
-                                pane.setStyle("-fx-background-color: cyan;");
+                                pane.setStyle("-fx-background-color: cyan;-fx-border-color: black;");
                                 computerAlreadyShoot[targetArray[0] + targetArray[2]][targetArray[1] + k] = true;
                             }
                         }
                         if (targetArray[1] + targetArray[3] != GRIDSIZE) {
                             pane = (Pane) yourGrid.getChildren().get((targetArray[1] + targetArray[3]) * GRIDSIZE + targetArray[0] + i);
-                            pane.setStyle("-fx-background-color: cyan;");
+                            pane.setStyle("-fx-background-color: cyan;-fx-border-color: black;");
                             computerAlreadyShoot[targetArray[0] + i][targetArray[1] + targetArray[3]] = true;
                         }
                     }
                 }
             }else
             {
-                pane.setStyle("-fx-background-color: Cyan;");
-                // yourGrid.add(pane,targetX,targetY);
+                pane.setStyle("-fx-background-color: Cyan;-fx-border-color: black;");
             }
 
             computerAlreadyShoot[targetX][targetY] = true;
@@ -308,53 +278,13 @@ public class MainGameController {
         }
 
     }
-    public void test()
-    {
-        Pane pane;
-           for(int i=0;i<20;i++) {
-
-               for(int j=0;j<20;j++)
-               {
-               pane = new Pane();
-               pane.setPrefSize(27, 27);
-               pane.setMaxSize(27, 27);
-               GridPane.setHalignment(pane, HPos.CENTER);
-               GridPane.setValignment(pane, VPos.CENTER);
-               if (computer.getGrid().isHit(i, j)) {
-                   pane.setStyle("-fx-background-color: red;");
-                   computerGrid.add(pane, i, j);
-
-
-               } else {
-
-                   pane.setStyle("-fx-background-color: Cyan;");
-                   computerGrid.add(pane, i, j);
-               }
-                   pane =new Pane();
-                   pane.setPrefSize(14,14);
-                   pane.setMaxSize(14,14);
-                   GridPane.setHalignment(pane, HPos.CENTER);
-                   GridPane.setValignment(pane, VPos.CENTER);
-                   if(computerTargetGrid.isHit(i,j))
-                   {
-                       pane.setStyle("-fx-background-color: red;");
-                       yourGrid.add(pane,i,j);
-                   }else
-                   {
-                       pane.setStyle("-fx-background-color: Cyan;");
-                       yourGrid.add(pane,i,j);
-                   }
-               }
-           }
-    }
-
     public void showPlayerShips() {
         int[][] table = computerTargetGrid.getGridTable();
         for (int i = 0; i < GRIDSIZE; i++) {
             for (int j = 0; j < GRIDSIZE; j++) {
                 if (table[i][j] != EMPTY) {
                     Pane pane = (Pane) yourGrid.getChildren().get(j * GRIDSIZE + i);
-                    pane.setStyle("-fx-background-color: green;");
+                    pane.setStyle("-fx-background-color: green;-fx-border-color: black;");
                 }
             }
         }
@@ -381,11 +311,11 @@ public class MainGameController {
         for (int i = 0; i < GRIDSIZE; i++) {
             for (int j = 0; j < GRIDSIZE; j++) {
                 Pane pane = (Pane) computerGrid.getChildren().get(j * GRIDSIZE + i);
-                if (pane.getStyle().isEmpty()) {
+                if (pane.getStyle().equals("-fx-border-color: black;")) {
                     if (computer.getGrid().isHit(i, j)) {
-                        pane.setStyle("-fx-background-color: yellow;");
+                        pane.setStyle("-fx-background-color: yellow;-fx-border-color: black;");
                     } else {
-                        pane.setStyle("-fx-background-color: Cyan;");
+                        pane.setStyle("-fx-background-color: Cyan;-fx-border-color: black;");
                     }
                 }
             }
@@ -393,8 +323,6 @@ public class MainGameController {
         }
 
     }
-
-
     public void saveGame() {
 
     }
@@ -424,8 +352,6 @@ public class MainGameController {
         showStats();
         endgameScreen.setVisible(true);
         endgame = true;
-
-        //stop game
     }
 
     public void load() {

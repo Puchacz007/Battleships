@@ -5,8 +5,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,26 +16,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.IOException;
+import java.util.Vector;
 
 public class GameSetUp {
 
-    private final EventHandler<MouseEvent> shipOnMouseDraggedEventHandler =
-            new EventHandler<>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    if (!dragged) return;
-
-                    double offsetX = event.getSceneX() - orgSceneX;
-                    double offsetY = event.getSceneY() - orgSceneY;
-                    double newTranslateX = orgTranslateX + offsetX;
-                    double newTranslateY = orgTranslateY + offsetY;
-
-
-                    ((GridPane) event.getSource()).setTranslateX(newTranslateX);
-                    ((GridPane) event.getSource()).setTranslateY(newTranslateY);
-                }
-            };
+    private static final int GRIDSIZE = 20;
     public Label capitalNr;
     @FXML
     public Label carrierNr;
@@ -57,7 +42,60 @@ public class GameSetUp {
     public GridPane carrier;
     @FXML
     private GridPane grid;
+    private final EventHandler<MouseEvent> shipOnMousePressedEventHandler
+            = new EventHandler<>() {
+        @Override
+        public void handle(MouseEvent event) {
+            // if (currentCruiserNumber <= 0) return;
 
+            shipLength = ((GridPane) event.getSource()).getColumnCount();
+            shipWidth = ((GridPane) event.getSource()).getRowCount();
+            source = event.getSource();
+
+            String text;
+            int number;
+
+            switch (shipLength) {
+                case 1:
+                    text = patrolNr.getText();
+                    number = Integer.parseInt(text);
+                    if (number == 0) return;
+                    //   patrol.getScene().setOnKeyPressed(setOnKeyPressed);
+                    break;
+                case 2:
+                    text = submarineNr.getText();
+                    number = Integer.parseInt(text);
+                    if (number == 0) return;
+                    submarine.getScene().setOnKeyPressed(setOnKeyPressed);
+                    break;
+                case 3:
+                    if (shipWidth == 1) {
+                        text = cruiserNr.getText();
+                        number = Integer.parseInt(text);
+                        if (number == 0) return;
+                        cruiser.getScene().setOnKeyPressed(setOnKeyPressed);
+                    } else if (shipWidth == 2) {
+                        text = carrierNr.getText();
+                        number = Integer.parseInt(text);
+                        if (number == 0) return;
+                        carrier.getScene().setOnKeyPressed(setOnKeyPressed);
+                    }
+                    break;
+                case 4:
+                    text = capitalNr.getText();
+                    number = Integer.parseInt(text);
+                    if (number == 0) return;
+                    capital.getScene().setOnKeyPressed(setOnKeyPressed);
+                    break;
+            }
+            orgSceneX = event.getSceneX();
+            orgSceneY = event.getSceneY();
+            orgTranslateX = ((GridPane) event.getSource()).getTranslateX();
+            orgTranslateY = ((GridPane) event.getSource()).getTranslateY();
+            dragged = true;
+
+        }
+    };
     private double orgTranslateX, orgTranslateY; //dragged object translation
     private double orgSceneX, orgSceneY; // dragged object original location
     private GameGrid playerGrid;
@@ -66,6 +104,25 @@ public class GameSetUp {
     private int crNumber, carrNumber, subNumber, capNumber, prNumber, shipLength, shipWidth;
     private boolean dragged = false;
     private Object source;
+    private int shipNumber = 0;
+    private Vector<Point> outlinedPanes;
+    private final EventHandler<MouseEvent> shipOnMouseDraggedEventHandler =
+            new EventHandler<>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    if (!dragged) return;
+
+                    double offsetX = event.getSceneX() - orgSceneX;
+                    double offsetY = event.getSceneY() - orgSceneY;
+                    double newTranslateX = orgTranslateX + offsetX;
+                    double newTranslateY = orgTranslateY + offsetY;
+
+
+                    ((GridPane) event.getSource()).setTranslateX(newTranslateX);
+                    ((GridPane) event.getSource()).setTranslateY(newTranslateY);
+                    outlinePanes(event);
+                }
+            };
     private final EventHandler<MouseEvent> shipOnMouseReleasedEventHandler =
             new EventHandler<>() {
                 @Override
@@ -74,19 +131,41 @@ public class GameSetUp {
 
                     int x = (int) (((GridPane) event.getSource()).getLayoutX() + event.getSceneX() - orgSceneX);
                     int y = (int) (((GridPane) event.getSource()).getLayoutY() + event.getSceneY() - orgSceneY);
+                    int length, width;
+                    if (((GridPane) event.getSource()).getRotate() == 0) {
 
-                    if (((GridPane) event.getSource()).getRotate() == 90) {
-                        //   x += 30;
-                        //  y -= 30;
+                        length = shipLength;
+                        width = shipWidth;
+                    } else {
+                        switch (shipLength) {
+                            case 2:
+                                x += 30;
 
+                                break;
+                            case 3:
+                                if (shipWidth == 1) {
+                                    x += 30;
+                                    y -= 30;
+                                } else {
+                                    x += 30;
+
+                                }
+                                break;
+                            case 4:
+                                x += 60;
+                                y -= 30;
+                                break;
+                        }
+                        length = shipWidth;
+                        width = shipLength;
                     }
                     x = x / 30;
                     y = y / 30;
 
-                    if (x >= 0 && x < 20 && y >= 0 && y < 20 && playerGrid.isAvailable(x, y, shipLength, shipWidth)) {
+                    if (x >= 0 && x < 20 && y >= 0 && y < 20 && playerGrid.isAvailable(x, y, length, width)) {
 
-                        if (((GridPane) event.getSource()).getRotate() == 0) markShip(x, y, shipLength, shipWidth);
-                        else markShip(x, y, shipWidth, shipLength);
+                        markShip(x, y, length, width);
+
                         String text;
                         int number;
 
@@ -126,6 +205,13 @@ public class GameSetUp {
                         }
 
                     } else {
+                        if (!outlinedPanes.isEmpty()) {
+                            for (int i = 0; i < outlinedPanes.size(); i++) {
+                                Point point = outlinedPanes.get(i);
+                                Pane pane = (Pane) grid.getChildren().get(((int) (point.getY()) * GRIDSIZE + (int) (point.getX())));
+                                pane.setStyle("  -fx-border-color: black;");
+                            }
+                        }
                         System.out.println("bad grid drop");
                     }
                     ((GridPane) event.getSource()).setTranslateX(orgTranslateX);
@@ -133,69 +219,17 @@ public class GameSetUp {
 
                     if (((GridPane) event.getSource()).getRotate() == 90) rotate();
                     dragged = false;
+                    outlinedPanes.removeAllElements();
                 }
             };
     private final EventHandler<KeyEvent> setOnKeyPressed = event -> {
 
         if (event.getCode() == KeyCode.R && dragged) {
             rotate();
+            outlineRotatedPanes();
         }
 
     };
-    private final EventHandler<MouseEvent> shipOnMousePressedEventHandler
-            = new EventHandler<>() {
-        @Override
-        public void handle(MouseEvent event) {
-            // if (currentCruiserNumber <= 0) return;
-
-            shipLength = ((GridPane) event.getSource()).getColumnCount();
-            shipWidth = ((GridPane) event.getSource()).getRowCount();
-            source = event.getSource();
-
-            String text;
-            int number;
-
-            switch (shipLength) {
-                case 1:
-                    text = patrolNr.getText();
-                    number = Integer.parseInt(text);
-                    if (number == 0) return;
-                    patrol.getScene().setOnKeyPressed(setOnKeyPressed);
-                    break;
-                case 2:
-                    text = submarineNr.getText();
-                    number = Integer.parseInt(text);
-                    if (number == 0) return;
-                    submarine.getScene().setOnKeyPressed(setOnKeyPressed);
-                    break;
-                case 3:
-                    if (shipWidth == 1) {
-                        text = cruiserNr.getText();
-                        number = Integer.parseInt(text);
-                        if (number == 0) return;
-                        cruiser.getScene().setOnKeyPressed(setOnKeyPressed);
-                    } else if (shipWidth == 2) {
-                        text = carrierNr.getText();
-                        number = Integer.parseInt(text);
-                        if (number == 0) return;
-                        carrier.getScene().setOnKeyPressed(setOnKeyPressed);
-                    }
-                    break;
-                case 4:
-                    text = capitalNr.getText();
-                    number = Integer.parseInt(text);
-                    if (number == 0) return;
-                    capital.getScene().setOnKeyPressed(setOnKeyPressed);
-                    break;
-            }
-            orgSceneX = event.getSceneX();
-            orgSceneY = event.getSceneY();
-            orgTranslateX = ((GridPane) event.getSource()).getTranslateX();
-            orgTranslateY = ((GridPane) event.getSource()).getTranslateY();
-            dragged = true;
-        }
-    };
-    private int shipNumber = 0;
 
     public void initialize() {
 
@@ -221,7 +255,7 @@ public class GameSetUp {
         submarine.setOnMouseReleased(shipOnMouseReleasedEventHandler);
 
         playerGrid = new GameGrid();
-
+        outlinedPanes = new Vector<>();
 
     }
 
@@ -229,6 +263,7 @@ public class GameSetUp {
 
         if (((GridPane) source).getRotate() == 0) ((GridPane) source).setRotate(90);
         else ((GridPane) source).setRotate(0);
+
     }
 
     void transferDataToSetUp(String crData, String carrData, String subData, String capData, String prData) {
@@ -266,20 +301,146 @@ public class GameSetUp {
 
     private void markShip(int x, int y, int length, int width) {
         playerGrid.addShip(x, y, length, width);
-        Pane pane;
+
         for (int i = 0; i < length; i++) {
             for (int j = 0; j < width; j++) {
-                pane = new Pane();
-                pane.setStyle("-fx-background-color: green;");
-                pane.setPrefSize(28, 28);
-                pane.setMaxSize(28, 28);
-                GridPane.setHalignment(pane, HPos.CENTER);
-                GridPane.setValignment(pane, VPos.CENTER);
-                grid.add(pane, x + i, y + j);
+                Pane pane = (Pane) grid.getChildren().get((y + j) * GRIDSIZE + x + i);
+                pane.setStyle("-fx-background-color: green; -fx-border-color: black;");
+            }
+        }
+    }
+
+    private void outlinePanes(MouseEvent event) {
+        int x = (int) (((GridPane) event.getSource()).getLayoutX() + event.getSceneX() - orgSceneX);
+        int y = (int) (((GridPane) event.getSource()).getLayoutY() + event.getSceneY() - orgSceneY);
+        int length, width;
+        if (((GridPane) event.getSource()).getRotate() == 0) {
+            length = shipLength;
+            width = shipWidth;
+        } else {
+            switch (shipLength) {
+                case 2:
+                    x += 30;
+
+                    break;
+                case 3:
+                    if (shipWidth == 1) {
+                        x += 30;
+                        y -= 30;
+                    } else {
+                        x += 30;
+
+                    }
+                    break;
+                case 4:
+                    x += 60;
+                    y -= 30;
+                    break;
+            }
+
+            length = shipWidth;
+            width = shipLength;
+        }
+        x = x / 30;
+        y = y / 30;
+
+
+        if (!outlinedPanes.isEmpty()) {
+            for (int i = 0; i < outlinedPanes.size(); i++) {
+                Point point = outlinedPanes.get(i);
+                Pane pane = (Pane) grid.getChildren().get(((int) (point.getY()) * GRIDSIZE + (int) (point.getX())));
+                pane.setStyle("  -fx-border-color: black;");
+            }
+            outlinedPanes.removeAllElements();
+        }
+        if (x >= 0 && x < 20 && y >= 0 && y < 20 && playerGrid.isAvailable(x, y, length, width)) {
+
+
+            for (int i = 0; i < length; i++) {
+                for (int j = 0; j < width; j++) {
+                    Pane pane = (Pane) grid.getChildren().get((y + j) * GRIDSIZE + x + i);
+                    pane.setStyle("  -fx-border-color: black;-fx-background-color: yellow;");
+                    Point point = new Point(x + i, y + j);
+                    outlinedPanes.addElement(point);
+                }
+            }
+        }
+    }
+
+    private void outlineRotatedPanes() {
+
+        if (!outlinedPanes.isEmpty()) {
+            int length, width, j = 0;
+            int x = (int) (outlinedPanes.get(0).getX()), y = (int) outlinedPanes.get(0).getY();
+            if ((((GridPane) source).getRotate() == 0)) {
+                length = shipLength;
+                width = shipWidth;
+                switch (shipLength) {
+                    case 2:
+                        x -= 1;
+
+                        break;
+                    case 3:
+                        if (shipWidth == 1) {
+                            x -= 1;
+                            y += 1;
+                        } else {
+                            x -= 1;
+
+                        }
+                        break;
+                    case 4:
+                        x -= 2;
+                        y += 1;
+                        break;
+                }
+            } else {
+                switch (shipLength) {
+                    case 2:
+                        x += 1;
+
+                        break;
+                    case 3:
+                        if (shipWidth == 1) {
+                            x += 1;
+                            y -= 1;
+                        } else {
+                            x += 1;
+
+                        }
+                        break;
+                    case 4:
+                        x += 2;
+                        y -= 1;
+                        break;
+                }
+                length = shipWidth;
+                width = shipLength;
+            }
+            for (int i = 0; i < outlinedPanes.size(); i++) {
+                Point point = outlinedPanes.get(i);
+                Pane pane = (Pane) grid.getChildren().get(((int) (point.getY()) * GRIDSIZE + (int) (point.getX())));
+                pane.setStyle("  -fx-border-color: black;");
+            }
+            if (x >= 0 && x < 20 && y >= 0 && y < 20 && playerGrid.isAvailable(x, y, length, width)) {
+                for (int i = 0; i < outlinedPanes.size(); i++) {
+
+
+                    Pane pane = (Pane) grid.getChildren().get((y + j) * GRIDSIZE + x + i / width);
+
+                    pane.setStyle("  -fx-border-color: black;-fx-background-color: yellow;");
+                    outlinedPanes.get(i).setLocation(x + i / width, y + j);
+
+                    ++j;
+                    if (j == width) j = 0;
+                }
             }
         }
     }
 
 
-
 }
+
+
+
+
