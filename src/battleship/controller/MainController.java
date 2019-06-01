@@ -40,4 +40,12 @@ public class MainController implements Initializable {
         loadGameStage.setScene(loadGameScene);
         loadGameStage.show();
     }
+
+    public void highScores(ActionEvent actionEvent) throws IOException {
+        Parent loadGameParent = FXMLLoader.load(getClass().getResource("view/high_scores.fxml"));
+        Scene highScoresScene = new Scene(loadGameParent);
+        Stage highScoresStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        highScoresStage.setScene(highScoresScene);
+        highScoresStage.show();
+    }
 }

@@ -1,4 +1,4 @@
-package battleship;
+package battleship.controller;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +11,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("controller/view/main.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("view/main.fxml"));
         primaryStage.setTitle("Battleships Warfare");
         primaryStage.setScene(new Scene(root,300,300));
 

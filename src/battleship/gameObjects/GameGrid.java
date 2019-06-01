@@ -1,8 +1,9 @@
 package battleship.gameObjects;
 
+import java.io.Serializable;
 import java.util.Vector;
 
-public class GameGrid {
+public class GameGrid implements Serializable {
 
 
     private static final int GRIDSIZE = 20;
@@ -22,13 +23,12 @@ public class GameGrid {
     }
 
 
-    public boolean isHit(int x, int y) {//- 2
+    public boolean isHit(int x, int y, boolean addDamage) {//- 2
         int shipId = gridTable[x][y];
-        if (shipId != EMPTY) {
+        if (shipId != EMPTY && addDamage) {
             shipsVector.get(shipId).wasHit();
-            return true;
-        } else return false;
-
+        }
+        return shipId != EMPTY;
     }
     public boolean isDestroyed(int x,int y)
     {

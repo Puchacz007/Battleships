@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -46,6 +47,7 @@ public class GameSetUp {
             = new EventHandler<>() {
         @Override
         public void handle(MouseEvent event) {
+            if (event.getButton() != MouseButton.PRIMARY) return;
             // if (currentCruiserNumber <= 0) return;
 
             shipLength = ((GridPane) event.getSource()).getColumnCount();
@@ -110,6 +112,7 @@ public class GameSetUp {
             new EventHandler<>() {
                 @Override
                 public void handle(MouseEvent event) {
+                    //   if(event.getButton() != MouseButton.PRIMARY)return;
                     if (!dragged) return;
 
                     double offsetX = event.getSceneX() - orgSceneX;
@@ -127,6 +130,7 @@ public class GameSetUp {
             new EventHandler<>() {
                 @Override
                 public void handle(MouseEvent event) {
+                    if (event.getButton() != MouseButton.PRIMARY) return;
                     if (!dragged) return;
 
                     int x = (int) (((GridPane) event.getSource()).getLayoutX() + event.getSceneX() - orgSceneX);
@@ -216,9 +220,9 @@ public class GameSetUp {
                     }
                     ((GridPane) event.getSource()).setTranslateX(orgTranslateX);
                     ((GridPane) event.getSource()).setTranslateY(orgTranslateY);
-
-                    if (((GridPane) event.getSource()).getRotate() == 90) rotate();
                     dragged = false;
+                    if (((GridPane) event.getSource()).getRotate() == 90) rotate();
+
                     outlinedPanes.removeAllElements();
                 }
             };
@@ -256,7 +260,6 @@ public class GameSetUp {
 
         playerGrid = new GameGrid();
         outlinedPanes = new Vector<>();
-
     }
 
     private void rotate() {

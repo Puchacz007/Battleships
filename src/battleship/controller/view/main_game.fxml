@@ -1702,7 +1702,7 @@
         </children>
     </GridPane>
     <Button layoutX="782.0" layoutY="528.0" mnemonicParsing="false" onAction="#fire" text="FIRE"/>
-    <Label layoutX="694.0" layoutY="502.0" text="Select target to fire and press the button" />
+    <Label layoutX="686.0" layoutY="502.0" text="Select the target and press the button to fire"/>
     <Label layoutX="771.0" layoutY="335.0" text="Your board" />
     <ImageView fx:id="target" fitHeight="27.0" fitWidth="27.0" layoutX="608.0" layoutY="300.0" pickOnBounds="true"
                preserveRatio="true" visible="false">
@@ -1714,7 +1714,8 @@
    <Label layoutX="771.0" layoutY="379.0" text="- Hit symbol" />
     <AnchorPane fx:id="menu" layoutX="350.0" layoutY="164.0" maxHeight="300.0" maxWidth="300.0" minHeight="300.0"
                 minWidth="300.0" prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: white;"
-                visible="false">
+                visible="false" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0"
+                AnchorPane.topAnchor="164.0">
         <children>
             <Button layoutX="100.0" layoutY="40.0" mnemonicParsing="false" onAction="#saveGame" prefHeight="25.0"
                     prefWidth="100.0" text="Save Game" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="100.0"
@@ -1728,6 +1729,10 @@
             <Button layoutX="100.0" layoutY="212.0" mnemonicParsing="false" onAction="#exit" prefHeight="25.0"
                     prefWidth="100.0" text="Exit" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="100.0"
                     AnchorPane.rightAnchor="100.0"/>
+            <TextField fx:id="saveName" layoutX="76.0" layoutY="44.0" text="Save" AnchorPane.leftAnchor="75.0"
+                       AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="44.0"/>
+            <Label layoutX="120.0" layoutY="27.0" text="Save Name" AnchorPane.leftAnchor="120.0"
+                   AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="27.0"/>
         </children>
     </AnchorPane>
     <AnchorPane fx:id="endgameScreen" layoutX="644.0" layoutY="368.0" prefHeight="219.0" prefWidth="320.0"
@@ -1747,9 +1752,19 @@
             <Label fx:id="accuracy" alignment="CENTER" layoutX="35.0" layoutY="144.0" prefHeight="50.0"
                    prefWidth="250.0" text="Accuracy = 70%" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0"
                    AnchorPane.topAnchor="130.0"/>
-            <Button layoutX="120.0" layoutY="160.0" mnemonicParsing="false" onAction="#exit" prefHeight="25.0"
+            <Button layoutX="120.0" layoutY="180.0" mnemonicParsing="false" onAction="#exit" prefHeight="25.0"
                     prefWidth="80.0" text="Exit" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0"
                     AnchorPane.topAnchor="180.0"/>
         </children>
     </AnchorPane>
+    <Pane fx:id="nicknamePane" layoutX="522.0" layoutY="268.0" prefHeight="100.0" prefWidth="160.0"
+          style="-fx-background-color: white;" visible="false" AnchorPane.bottomAnchor="250.0"
+          AnchorPane.leftAnchor="420.0" AnchorPane.rightAnchor="420.0" AnchorPane.topAnchor="250.0">
+        <children>
+            <TextField fx:id="nicknamePicker" layoutX="4.0" layoutY="61.0" text="Player"/>
+            <Label layoutX="24.0" layoutY="23.0" text="Write your Nickname"/>
+            <Label layoutX="35.0" layoutY="6.0" text="You are the best"/>
+            <Label layoutX="28.0" layoutY="42.0" text="And enjoy the glory"/>
+        </children>
+    </Pane>
 </AnchorPane>

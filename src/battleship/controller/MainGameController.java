@@ -2,11 +2,14 @@ package battleship.controller;
 
 import battleship.gameObjects.AI;
 import battleship.gameObjects.GameGrid;
+import battleship.gameObjects.GameSave;
+import battleship.gameObjects.HighScores;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -16,6 +19,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
 import java.awt.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 public class MainGameController {
 
@@ -27,6 +33,7 @@ public class MainGameController {
     public Label hits;
     public Label result;
     public AnchorPane mainWindow;
+
     @FXML
     private ImageView target; // target symbol
     private boolean endgame = false;
@@ -36,51 +43,83 @@ public class MainGameController {
     private GridPane yourGrid; // computerGrid to see computer shoot
     @FXML
     private AnchorPane menu;
-
-    
-    private int targetX,targetY;
-    private GameGrid computerTargetGrid;
-    private AI computer;
-    private boolean[][] playerAlreadyShoot;
-    private boolean[][] computerAlreadyShoot;
-    private boolean wasDestroyed = false, wasHit = false;
     private final EventHandler<KeyEvent> setOnKeyPressedESC = event -> {
 
         if (event.getCode() == KeyCode.ESCAPE) {
             menu.setVisible(!menu.isVisible());
         }
     };
+    
+    private int targetX,targetY;
+    private GameGrid computerTargetGrid;
+    private AI computer;
+    private boolean[][] playerAlreadyShoot;
+    private boolean[][] computerAlreadyShoot;
     @FXML
     private AnchorPane endgameScreen;
+    public TextField saveName;
+    public Pane nicknamePane;
     private int numberOfPlayerShoots = 0;
     private int numberOfHits = 0;
     private int playerShipsNumber;
-    //private  int AIShipsNumber[];
     private int[] playerShipsTypeNumber;
     private int computerShipsNumber;
+    public TextField nicknamePicker;
+    private boolean wasDestroyed, wasHit;
+    private long startTime;
+    private float saveTime;
+    private final EventHandler<KeyEvent> nickInputENTER = event -> {
+
+        if (event.getCode() == KeyCode.ENTER) {
+            HighScores highScores = new HighScores();
+            String nick = nicknamePicker.getCharacters().toString();
+            highScores.addHighScore(playerShipsNumber, numberOfPlayerShoots, numberOfHits, startTime, saveTime, nick);
+            nicknamePane.setVisible(false);
+            showEndScreen();
+        }
+    };
 
     public void initialize()
     {
-      computerTargetGrid=new GameGrid();
-      computer = new AI();
-
+        mainWindow.setOnKeyPressed(setOnKeyPressedESC);
         GridPane.setHalignment(target, HPos.CENTER);
         GridPane.setValignment(target, VPos.CENTER);
-        playerAlreadyShoot = new boolean[GRIDSIZE][GRIDSIZE];
-        computerAlreadyShoot = new boolean[GRIDSIZE][GRIDSIZE];
-        mainWindow.setOnKeyPressed(setOnKeyPressedESC);
+        startTime = System.currentTimeMillis();
+        nicknamePicker.setOnKeyPressed(nickInputENTER);
+        saveName.setOnKeyPressed(setOnKeyPressedESC);
+    }
+
+    public void setTarget(MouseEvent mouseEvent) {
+        if (endgame) return;
+        if (target.isVisible()) computerGrid.getChildren().remove(target);
+
+        int mouseX = (int) mouseEvent.getX();
+        int mouseY = (int) mouseEvent.getY();
+        mouseX = mouseX / 30;
+        mouseY = mouseY / 30;
+        targetX = mouseX;
+        targetY = mouseY;
+        if (playerAlreadyShoot[targetX][targetY]) {
+            System.out.println("You shoot this target already");
+            return;
+        }
+
+
+        target.setVisible(true);
+
+        computerGrid.add(target, mouseX, mouseY);
 
     }
 
-    void transferDataToMainGame(int prNumber, int subNumber, int crNumber, int carrNumber, int capNumber, GameGrid playerGrid)
-    {
-        //playerCrNumber=crNumber;
-        // computerCrNumber=crNumber;
-        //AIShipsNumber=new int[5];
+    void transferDataToMainGame(int prNumber, int subNumber, int crNumber, int carrNumber, int capNumber, GameGrid playerGrid) {
+        wasDestroyed = false;
+        wasHit = false;
+        computerTargetGrid = new GameGrid();
+        computer = new AI();
+        playerAlreadyShoot = new boolean[GRIDSIZE][GRIDSIZE];
+        computerAlreadyShoot = new boolean[GRIDSIZE][GRIDSIZE];
+        saveTime = 0;
         playerShipsTypeNumber = new int[5];
-        //   AIShipsNumber[0]=prNumber;
-        // AIShipsNumber[1]=subNumber;
-        // AIShipsNumber[2]=crNumber;
         computerShipsNumber = prNumber + capNumber + crNumber + carrNumber + capNumber;
         playerShipsNumber = prNumber + capNumber + crNumber + carrNumber + capNumber;
         playerShipsTypeNumber[0] = prNumber;//1,1
@@ -88,33 +127,9 @@ public class MainGameController {
         playerShipsTypeNumber[2] = crNumber;//3,1
         playerShipsTypeNumber[3] = capNumber;//4,1
         playerShipsTypeNumber[4] = carrNumber;//3,2
-
         computer.setUpShips(prNumber, subNumber, crNumber, carrNumber, capNumber);
         computerTargetGrid = playerGrid;
         showPlayerShips();
-    }
-
-    public void setTarget(MouseEvent mouseEvent) {
-        if (endgame) return;
-        if (target.isVisible()) computerGrid.getChildren().remove(target);
-
-        int mouseX= (int) mouseEvent.getX();
-        int mouseY= (int) mouseEvent.getY();
-        mouseX=mouseX/30;
-        mouseY=mouseY/30;
-        targetX=mouseX;
-        targetY=mouseY;
-        if (playerAlreadyShoot[targetX][targetY]) {
-            System.out.println("You shoot this target already");
-            return;
-        }
-
-
-
-        target.setVisible(true);
-
-        computerGrid.add(target, mouseX, mouseY);
-
     }
 
     public  void fire()
@@ -124,7 +139,7 @@ public class MainGameController {
             target.setVisible(false);
             computerGrid.getChildren().remove(target);
             Pane pane = (Pane) computerGrid.getChildren().get(targetY * GRIDSIZE + targetX);
-            if (computer.getGrid().isHit(targetX,targetY))
+            if (computer.getGrid().isHit(targetX, targetY, true))
             {
                 pane.setStyle("-fx-background-color: red;-fx-border-color: black;");
                 ++numberOfHits;
@@ -196,11 +211,10 @@ public class MainGameController {
             pane = (Pane) yourGrid.getChildren().get(targetY * GRIDSIZE + targetX);
             wasDestroyed = false;
             wasHit = false;
-            if(computerTargetGrid.isHit(targetX,targetY))
+            if (computerTargetGrid.isHit(targetX, targetY, true))
             {
                 wasHit = true;
                 pane.setStyle("-fx-background-color: red;-fx-border-color: black;");
-                // yourGrid.add(pane,targetX,targetY);
                 if(computerTargetGrid.isDestroyed(targetX,targetY))
                 {
                     --playerShipsNumber;
@@ -278,7 +292,8 @@ public class MainGameController {
         }
 
     }
-    public void showPlayerShips() {
+
+    private void showPlayerShips() {
         int[][] table = computerTargetGrid.getGridTable();
         for (int i = 0; i < GRIDSIZE; i++) {
             for (int j = 0; j < GRIDSIZE; j++) {
@@ -290,7 +305,7 @@ public class MainGameController {
         }
     }
 
-    public void showStats() {
+    private void showStats() {
         float shotsAccuracy = 0;
         if (numberOfPlayerShoots > 0) shotsAccuracy = (float) 100 * numberOfHits / numberOfPlayerShoots;
         String numberAsString = String.format("%.2f", shotsAccuracy);
@@ -304,15 +319,18 @@ public class MainGameController {
     public void surrender() {
         showAllAIShips();
         result.setText("DEFEAT !!!");
-        showEndScreen();
+        menu.setVisible(false);
+        nicknamePane.setVisible(true);
+        endgame = true;
+
     }
 
-    public void showAllAIShips() {
+    private void showAllAIShips() {
         for (int i = 0; i < GRIDSIZE; i++) {
             for (int j = 0; j < GRIDSIZE; j++) {
                 Pane pane = (Pane) computerGrid.getChildren().get(j * GRIDSIZE + i);
                 if (pane.getStyle().equals("-fx-border-color: black;")) {
-                    if (computer.getGrid().isHit(i, j)) {
+                    if (computer.getGrid().isHit(i, j, true)) {
                         pane.setStyle("-fx-background-color: yellow;-fx-border-color: black;");
                     } else {
                         pane.setStyle("-fx-background-color: Cyan;-fx-border-color: black;");
@@ -323,21 +341,34 @@ public class MainGameController {
         }
 
     }
-    public void saveGame() {
-
-    }
 
     public void exit() {
         System.exit(0);
     }
 
-    public void checkVictoryConditions() {
+    public void saveGame() throws IOException {
+
+        long elapsedTimeMillis = System.currentTimeMillis() - startTime;
+        float elapsedTimeMin = elapsedTimeMillis / (60 * 1000F);
+        GameSave gameSave = new GameSave(computerTargetGrid, computer, playerAlreadyShoot, computerAlreadyShoot, wasDestroyed, wasHit, elapsedTimeMin,
+                numberOfPlayerShoots, numberOfHits, playerShipsNumber, computerShipsNumber, playerShipsTypeNumber);
+        String name = saveName.getCharacters().toString();
+        FileOutputStream fileOut = new FileOutputStream("./src/battleship/controller/view/resources/saves/" + name + ".dat");
+        ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+        objectOut.writeObject(gameSave);
+        System.out.println("The Object  was succesfully written to a file");
+        objectOut.close();
+    }
+
+    private void checkVictoryConditions() {
         if (computerShipsNumber == 0 && playerShipsNumber == 0) {
             result.setText("DRAW !!!");
             showEndScreen();
         } else if (computerShipsNumber == 0) {
             result.setText("VICTORY !!!");
-            showEndScreen();
+            nicknamePane.setVisible(true);
+            endgame = true;
+            menu.setVisible(false);
         } else if (playerShipsNumber == 0) {
             result.setText("DEFEAT !!!");
             showEndScreen();
@@ -345,7 +376,7 @@ public class MainGameController {
 
     }
 
-    public void showEndScreen() {
+    private void showEndScreen() {
         if (target.isVisible()) target.setVisible(false);
         mainWindow.setOnKeyPressed(null);
         menu.setVisible(false);
@@ -354,8 +385,63 @@ public class MainGameController {
         endgame = true;
     }
 
+    public void transferLoadGame(GameSave gameSave) {
+        computerTargetGrid = gameSave.getComputerTargetGrid();
+        computer = gameSave.getComputer();
+        playerAlreadyShoot = gameSave.getPlayerAlreadyShoot();
+        computerAlreadyShoot = gameSave.getComputerAlreadyShoot();
+        computerShipsNumber = gameSave.getComputerShipsNumber();
+        playerShipsNumber = gameSave.getPlayerShipsNumber();
+        numberOfPlayerShoots = gameSave.getNumberOfPlayerShoots();
+        numberOfHits = gameSave.getNumberOfHits();
+        playerShipsTypeNumber = gameSave.getPlayerShipsTypeNumber();
+        saveTime = gameSave.getSaveTime();
+        wasHit = gameSave.getWasHit();
+        wasDestroyed = gameSave.getWasDestroyed();
+        setsSavedGrids();
+    }
+
+    public void setsSavedGrids() {
+        showPlayerShips();
+        for (int targetX = 0; targetX < GRIDSIZE; targetX++) {
+            for (int targetY = 0; targetY < GRIDSIZE; targetY++) {
+
+                if (playerAlreadyShoot[targetX][targetY]) {
+                    Pane pane = (Pane) computerGrid.getChildren().get(targetY * GRIDSIZE + targetX);
+                    if (computer.getGrid().isHit(targetX, targetY, false)) {
+
+
+                        if (computer.getGrid().isDestroyed(targetX, targetY)) {
+                            pane.setStyle("-fx-background-color: black;-fx-border-color: black;");
+
+                        } else {
+                            pane.setStyle("-fx-background-color: red;-fx-border-color: black;");
+                        }
+                    } else {
+                        pane.setStyle("-fx-background-color: Cyan;-fx-border-color: black;");
+
+                    }
+                }
+                if (computerAlreadyShoot[targetX][targetY]) {
+                    Pane pane = (Pane) yourGrid.getChildren().get(targetY * GRIDSIZE + targetX);
+                    if (computerTargetGrid.isHit(targetX, targetY, false)) {
+
+                        if (computerTargetGrid.isDestroyed(targetX, targetY)) {
+                            pane.setStyle("-fx-background-color: black;-fx-border-color: black;");
+                        } else {
+                            pane.setStyle("-fx-background-color: red;-fx-border-color: black;");
+                        }
+                    } else {
+                        pane.setStyle("-fx-background-color: Cyan;-fx-border-color: black;");
+                    }
+                }
+            }
+        }
+        targetX = -1;
+        targetY = -1;
+    }
+
     public void load() {
 
     }
-
 }

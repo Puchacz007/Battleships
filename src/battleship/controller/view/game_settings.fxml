@@ -5,12 +5,13 @@
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
             prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.172-ea"
             fx:controller="battleship.controller.GameSettings">
-    <Pane layoutX="120.0" layoutY="248.0" prefHeight="80.0" prefWidth="160.0">
-        <Button layoutX="2.0" layoutY="57.0" mnemonicParsing="false" onAction="#decreaseCarrier" prefHeight="25.0"
+    <Pane layoutX="120.0" layoutY="251.0" prefHeight="80.0" prefWidth="160.0" AnchorPane.leftAnchor="120.0"
+          AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="250.0">
+        <Button layoutX="2.0" layoutY="54.0" mnemonicParsing="false" onAction="#decreaseCarrier" prefHeight="25.0"
                 prefWidth="25.0" text="-"/>
         <Button layoutX="2.0" layoutY="2.0" mnemonicParsing="false" onAction="#increaseCarrier" prefHeight="25.0"
                 prefWidth="25.0" text="+"/>
-        <Label fx:id="carrNumber" alignment="CENTER" contentDisplay="TOP" layoutX="2.0" layoutY="30.0" prefHeight="25.0"
+        <Label fx:id="carrNumber" alignment="CENTER" contentDisplay="TOP" layoutX="2.0" layoutY="28.0" prefHeight="25.0"
                prefWidth="25.0" text="0"/>
         <GridPane layoutX="60.0" layoutY="25.0">
             <columnConstraints>
@@ -21,7 +22,7 @@
                 <RowConstraints/>
             </rowConstraints>
         </GridPane>
-        <GridPane gridLinesVisible="true" layoutX="49.0" layoutY="10.0" style="-fx-background-color: green;">
+        <GridPane gridLinesVisible="true" layoutX="33.0" layoutY="13.0" style="-fx-background-color: green;">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0"/>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0"/>
@@ -33,12 +34,13 @@
             </rowConstraints>
         </GridPane>
     </Pane>
-    <Pane layoutX="36.0" layoutY="129.0" prefHeight="80.0" prefWidth="160.0">
-        <Button layoutX="2.0" layoutY="57.0" mnemonicParsing="false" onAction="#decreaseCruiser" prefHeight="25.0"
+    <Pane layoutX="40.0" layoutY="129.0" prefHeight="80.0" prefWidth="160.0" AnchorPane.leftAnchor="40.0"
+          AnchorPane.topAnchor="129.0">
+        <Button layoutX="2.0" layoutY="54.0" mnemonicParsing="false" onAction="#decreaseCruiser" prefHeight="25.0"
                 prefWidth="25.0" text="-"/>
         <Button layoutX="2.0" layoutY="2.0" mnemonicParsing="false" onAction="#increaseCruiser" prefHeight="25.0"
                 prefWidth="25.0" text="+"/>
-        <GridPane gridLinesVisible="true" layoutX="40.0" layoutY="28.0" prefHeight="30.0" prefWidth="91.0"
+        <GridPane gridLinesVisible="true" layoutX="33.0" layoutY="25.0" prefHeight="30.0" prefWidth="91.0"
                   style="-fx-background-color: green;">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
@@ -49,17 +51,18 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
             </rowConstraints>
         </GridPane>
-        <Label fx:id="crNumber" alignment="CENTER" contentDisplay="TOP" layoutX="2.0" layoutY="30.0" prefHeight="25.0"
+        <Label fx:id="crNumber" alignment="CENTER" contentDisplay="TOP" layoutX="2.0" layoutY="28.0" prefHeight="25.0"
                prefWidth="25.0" text="0"/>
     </Pane>
-    <Pane layoutX="246.0" layoutY="22.0" prefHeight="80.0" prefWidth="160.0">
-        <Button layoutX="2.0" layoutY="57.0" mnemonicParsing="false" onAction="#decreaseSub" prefHeight="25.0"
+    <Pane layoutX="246.0" layoutY="22.0" prefHeight="80.0" prefWidth="160.0" AnchorPane.bottomAnchor="298.0"
+          AnchorPane.leftAnchor="246.0" AnchorPane.rightAnchor="-6.0" AnchorPane.topAnchor="22.0">
+        <Button layoutX="2.0" layoutY="54.0" mnemonicParsing="false" onAction="#decreaseSub" prefHeight="25.0"
                 prefWidth="25.0" text="-"/>
         <Button layoutX="2.0" layoutY="2.0" mnemonicParsing="false" onAction="#increaseSub" prefHeight="25.0"
                 prefWidth="25.0" text="+"/>
-        <Label fx:id="subNumber" alignment="CENTER" contentDisplay="TOP" layoutX="2.0" layoutY="30.0" prefHeight="25.0"
+        <Label fx:id="subNumber" alignment="CENTER" contentDisplay="TOP" layoutX="2.0" layoutY="28.0" prefHeight="25.0"
                prefWidth="25.0" text="0"/>
-        <GridPane gridLinesVisible="true" layoutX="40.0" layoutY="28.0" style="-fx-background-color: green;">
+        <GridPane gridLinesVisible="true" layoutX="33.0" layoutY="25.0" style="-fx-background-color: green;">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0"/>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0"/>
@@ -69,14 +72,15 @@
             </rowConstraints>
         </GridPane>
     </Pane>
-    <Pane layoutX="36.0" layoutY="22.0" prefHeight="80.0" prefWidth="160.0">
-        <Button layoutX="2.0" layoutY="57.0" mnemonicParsing="false" onAction="#decreaseCapital" prefHeight="25.0"
+    <Pane layoutX="40.0" layoutY="22.0" prefHeight="80.0" prefWidth="160.0" AnchorPane.bottomAnchor="298.0"
+          AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="22.0">
+        <Button layoutX="2.0" layoutY="54.0" mnemonicParsing="false" onAction="#decreaseCapital" prefHeight="25.0"
                 prefWidth="25.0" text="-"/>
         <Button layoutX="2.0" layoutY="2.0" mnemonicParsing="false" onAction="#increaseCapital" prefHeight="25.0"
                 prefWidth="25.0" text="+"/>
-        <Label fx:id="capNumber" alignment="CENTER" contentDisplay="TOP" layoutX="2.0" layoutY="30.0" prefHeight="25.0"
+        <Label fx:id="capNumber" alignment="CENTER" contentDisplay="TOP" layoutX="2.0" layoutY="28.0" prefHeight="25.0"
                prefWidth="25.0" text="0"/>
-        <GridPane gridLinesVisible="true" layoutX="40.0" layoutY="28.0" style="-fx-background-color: green;">
+        <GridPane gridLinesVisible="true" layoutX="33.0" layoutY="25.0" style="-fx-background-color: green;">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0"/>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="30.0" minWidth="10.0" prefWidth="30.0"/>
@@ -88,14 +92,15 @@
             </rowConstraints>
         </GridPane>
     </Pane>
-    <Pane layoutX="246.0" layoutY="129.0" prefHeight="80.0" prefWidth="160.0">
-        <Button layoutX="2.0" layoutY="57.0" mnemonicParsing="false" onAction="#decreasePatrol" prefHeight="25.0"
+    <Pane layoutX="246.0" layoutY="129.0" prefHeight="80.0" prefWidth="160.0" AnchorPane.bottomAnchor="191.0"
+          AnchorPane.rightAnchor="-6.0">
+        <Button layoutX="2.0" layoutY="54.0" mnemonicParsing="false" onAction="#decreasePatrol" prefHeight="25.0"
                 prefWidth="25.0" text="-"/>
         <Button layoutX="2.0" layoutY="2.0" mnemonicParsing="false" onAction="#increasePatrol" prefHeight="25.0"
                 prefWidth="25.0" text="+"/>
-        <Label fx:id="prNumber" alignment="CENTER" contentDisplay="TOP" layoutX="2.0" layoutY="30.0" prefHeight="25.0"
+        <Label fx:id="prNumber" alignment="CENTER" contentDisplay="TOP" layoutX="2.0" layoutY="28.0" prefHeight="25.0"
                prefWidth="25.0" text="0"/>
-        <GridPane gridLinesVisible="true" layoutX="40.0" layoutY="28.0" style="-fx-background-color: green;">
+        <GridPane gridLinesVisible="true" layoutX="33.0" layoutY="25.0" style="-fx-background-color: green;">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0"/>
             </columnConstraints>

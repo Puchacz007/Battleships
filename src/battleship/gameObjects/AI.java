@@ -1,10 +1,11 @@
 package battleship.gameObjects;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.Random;
 import java.util.Vector;
 
-public class AI {
+public class AI implements Serializable {
     private static final int GRIDSIZE = 20;
     int targetLength = 0, targetWidth = 0;
     //  boolean direction = false; //false change length,true change width
@@ -246,13 +247,14 @@ public class AI {
 
             do {
                 errorExit++;
-                targetX = randomInt(18);
-                targetY = randomInt(18);
+
                 if (!chooseRotation()) {
                     temp = width;
                     width = length;
                     length = temp;
                 }
+                targetX = randomInt(GRIDSIZE - length);
+                targetY = randomInt(GRIDSIZE - width);
                 if (shipsGrid.isAvailable(targetX, targetY, length, width)) break;
                 temp = length;
                 length = width;
@@ -266,7 +268,6 @@ public class AI {
             shipsGrid.addShip(targetX, targetY, length, width);
             --size;
         }
-        //}
 
     }
 

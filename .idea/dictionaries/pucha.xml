@@ -2,6 +2,10 @@
   <dictionary name="pucha">
     <words>
       <w>gridsize</w>
+      <w>highscoregrid</w>
+      <w>highscoregridcolumns</w>
+      <w>highscoregridsrows</w>
+      <w>higscoresnumber</w>
       <w>maxshipsnumber</w>
     </words>
   </dictionary>

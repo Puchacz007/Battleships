@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.*?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="300.0" prefWidth="300.0"
             xmlns="http://javafx.com/javafx/8.0.172-ea" fx:controller="battleship.controller.LoadGame">
     <children>
-        <Button layoutX="112.0" layoutY="246.0" mnemonicParsing="false" text="Load Game"/>
-        <ListView layoutX="51.0" layoutY="28.0" prefHeight="200.0" prefWidth="200.0"/>
+        <Button layoutX="196.0" layoutY="248.0" mnemonicParsing="false" onAction="#load" prefHeight="20.0"
+                prefWidth="90.0" text="Load Game" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="20.0"/>
+        <Button layoutX="20.0" layoutY="248.0" mnemonicParsing="false" onAction="#ret" prefHeight="20.0"
+                prefWidth="90.0" text="Main Menu" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="20.0"/>
+        <ListView fx:id="listView" layoutX="20.0" layoutY="14.0" prefHeight="220.0" prefWidth="260.0"/>
     </children>
 </AnchorPane>
