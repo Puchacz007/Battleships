@@ -20,6 +20,7 @@ public class GameSettings {
     private int currentShipNumber = 0;
 
     public void startGame(ActionEvent actionEvent) throws IOException {
+        if (currentShipNumber == 0) return;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("view/game_set_up.fxml"));
 
         Parent newGameParent = loader.load();
@@ -35,9 +36,9 @@ public class GameSettings {
 
         newGameStage.show();
         newGameStage.setMinHeight(640);
-        newGameStage.setMinWidth(1020);
-       // newGameStage.setMaxHeight(600);
-        //newGameStage.setMaxWidth(800);
+        newGameStage.setMinWidth(1015);
+        newGameStage.setMaxHeight(640);
+        newGameStage.setMaxWidth(1015);
     }
   
     private int increase(int i) {

@@ -1,12 +1,15 @@
 <component name="ProjectDictionaryState">
   <dictionary name="pucha">
     <words>
+      <w>getx</w>
+      <w>gety</w>
       <w>gridsize</w>
       <w>highscoregrid</w>
       <w>highscoregridcolumns</w>
       <w>highscoregridsrows</w>
       <w>higscoresnumber</w>
       <w>maxshipsnumber</w>
+      <w>succesfully</w>
     </words>
   </dictionary>
 </component>

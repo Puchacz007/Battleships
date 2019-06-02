@@ -28,10 +28,11 @@ public class LoadGame {
         File folder = new File("./src/battleship/controller/view/resources/saves/");
         listOfFiles = folder.listFiles();
 
-        for (int i = 0; i < listOfFiles.length; i++) {
-            if (listOfFiles[i].isFile()) {
-                System.out.println("File " + listOfFiles[i].getName());
-                listView.getItems().add(listOfFiles[i].getName());
+        assert listOfFiles != null;
+        for (File listOfFile : listOfFiles) {
+            if (listOfFile.isFile()) {
+                System.out.println("File " + listOfFile.getName());
+                listView.getItems().add(listOfFile.getName());
             }
         }
     }
@@ -60,7 +61,9 @@ public class LoadGame {
         newGameStage.setScene(newGameScene);
         newGameStage.show();
         newGameStage.setMinHeight(640);
-        newGameStage.setMinWidth(1020);
+        newGameStage.setMinWidth(1015);
+        newGameStage.setMaxHeight(640);
+        newGameStage.setMaxWidth(1015);
     }
 
     public void ret(ActionEvent actionEvent) throws IOException {
@@ -69,5 +72,11 @@ public class LoadGame {
         Stage primaryStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         primaryStage.setScene(primaryScene);
         primaryStage.show();
+        primaryStage.setMinHeight(340);
+        primaryStage.setMinWidth(315);
+        primaryStage.setMaxWidth(315);
+        primaryStage.setMaxHeight(340);
+        primaryStage.setHeight(340);
+        primaryStage.setWidth(315);
     }
 }

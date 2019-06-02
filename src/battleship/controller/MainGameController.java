@@ -4,10 +4,15 @@ import battleship.gameObjects.AI;
 import battleship.gameObjects.GameGrid;
 import battleship.gameObjects.GameSave;
 import battleship.gameObjects.HighScores;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -17,6 +22,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.FileOutputStream;
@@ -214,9 +220,7 @@ public class MainGameController {
             if (computerTargetGrid.isHit(targetX, targetY, true))
             {
                 wasHit = true;
-                pane.setStyle("-fx-background-color: red;-fx-border-color: black;");
-                if(computerTargetGrid.isDestroyed(targetX,targetY))
-                {
+                if (computerTargetGrid.isDestroyed(targetX, targetY)) {
                     --playerShipsNumber;
                     int size = computerTargetGrid.destroyedShipSize(targetX, targetY);
                     switch (size) {
@@ -238,14 +242,13 @@ public class MainGameController {
                     }
                     wasDestroyed = true;
                     int[] targetArray = computerTargetGrid.wasDestroyed(targetX, targetY);
-                    for(int i=0;i<targetArray[2];i++)
-                    {
+                    for (int i = 0; i < targetArray[2]; i++) {
                         if (targetArray[1] != 0) {
                             pane = (Pane) yourGrid.getChildren().get((targetArray[1] - 1) * GRIDSIZE + targetArray[0] + i);
                             computerAlreadyShoot[targetArray[0] + i][targetArray[1] - 1] = true;
                             pane.setStyle("-fx-background-color: cyan;-fx-border-color: black;");
                         }
-                        for(int j=0;j<targetArray[3];j++) {
+                        for (int j = 0; j < targetArray[3]; j++) {
 
                             pane = (Pane) yourGrid.getChildren().get((targetArray[1] + j) * GRIDSIZE + targetArray[0] + i);
                             pane.setStyle("-fx-background-color: black;-fx-border-color: black;");
@@ -276,6 +279,8 @@ public class MainGameController {
                             computerAlreadyShoot[targetArray[0] + i][targetArray[1] + targetArray[3]] = true;
                         }
                     }
+                } else {
+                    pane.setStyle("-fx-background-color: red;-fx-border-color: black;");
                 }
             }else
             {
@@ -361,15 +366,15 @@ public class MainGameController {
     }
 
     private void checkVictoryConditions() {
-        if (computerShipsNumber == 0 && playerShipsNumber == 0) {
+        if (computerShipsNumber <= 0 && playerShipsNumber <= 0) {
             result.setText("DRAW !!!");
             showEndScreen();
-        } else if (computerShipsNumber == 0) {
+        } else if (computerShipsNumber <= 0) {
             result.setText("VICTORY !!!");
             nicknamePane.setVisible(true);
             endgame = true;
             menu.setVisible(false);
-        } else if (playerShipsNumber == 0) {
+        } else if (playerShipsNumber <= 0) {
             result.setText("DEFEAT !!!");
             showEndScreen();
         }
@@ -441,7 +446,32 @@ public class MainGameController {
         targetY = -1;
     }
 
-    public void load() {
+    public void load(ActionEvent actionEvent) throws IOException {
 
+        Parent loadGameParent = FXMLLoader.load(getClass().getResource("view/load_game.fxml"));
+        Scene loadGameScene = new Scene(loadGameParent, 300, 300);
+        Stage loadGameStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        loadGameStage.setScene(loadGameScene);
+        loadGameStage.show();
+        loadGameStage.setMinHeight(340);
+        loadGameStage.setMinWidth(315);
+        loadGameStage.setMaxWidth(315);
+        loadGameStage.setMaxHeight(340);
+        loadGameStage.setHeight(340);
+        loadGameStage.setWidth(315);
+    }
+
+    public void ret(ActionEvent actionEvent) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("view/main.fxml"));
+        Scene primaryScene = new Scene(root);
+        Stage primaryStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        primaryStage.setScene(primaryScene);
+        primaryStage.show();
+        primaryStage.setMinHeight(340);
+        primaryStage.setMinWidth(315);
+        primaryStage.setMaxWidth(315);
+        primaryStage.setMaxHeight(340);
+        primaryStage.setHeight(340);
+        primaryStage.setWidth(315);
     }
 }

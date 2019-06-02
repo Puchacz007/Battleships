@@ -48,7 +48,6 @@ public class GameSetUp {
         @Override
         public void handle(MouseEvent event) {
             if (event.getButton() != MouseButton.PRIMARY) return;
-            // if (currentCruiserNumber <= 0) return;
 
             shipLength = ((GridPane) event.getSource()).getColumnCount();
             shipWidth = ((GridPane) event.getSource()).getRowCount();
@@ -169,7 +168,7 @@ public class GameSetUp {
                     if (x >= 0 && x < 20 && y >= 0 && y < 20 && playerGrid.isAvailable(x, y, length, width)) {
 
                         markShip(x, y, length, width);
-
+                        --shipNumber;
                         String text;
                         int number;
 
@@ -210,8 +209,7 @@ public class GameSetUp {
 
                     } else {
                         if (!outlinedPanes.isEmpty()) {
-                            for (int i = 0; i < outlinedPanes.size(); i++) {
-                                Point point = outlinedPanes.get(i);
+                            for (Point point : outlinedPanes) {
                                 Pane pane = (Pane) grid.getChildren().get(((int) (point.getY()) * GRIDSIZE + (int) (point.getX())));
                                 pane.setStyle("  -fx-border-color: black;");
                             }
@@ -288,7 +286,7 @@ public class GameSetUp {
     }
 
     public void startMainGame(ActionEvent actionEvent) throws IOException {
-        //if (currentCruiserNumber > 0) return;
+        if (shipNumber > 0) return;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("view/main_game.fxml"));
 
         Parent root = loader.load();
@@ -349,8 +347,7 @@ public class GameSetUp {
 
 
         if (!outlinedPanes.isEmpty()) {
-            for (int i = 0; i < outlinedPanes.size(); i++) {
-                Point point = outlinedPanes.get(i);
+            for (Point point : outlinedPanes) {
                 Pane pane = (Pane) grid.getChildren().get(((int) (point.getY()) * GRIDSIZE + (int) (point.getX())));
                 pane.setStyle("  -fx-border-color: black;");
             }
@@ -420,8 +417,7 @@ public class GameSetUp {
                 length = shipWidth;
                 width = shipLength;
             }
-            for (int i = 0; i < outlinedPanes.size(); i++) {
-                Point point = outlinedPanes.get(i);
+            for (Point point : outlinedPanes) {
                 Pane pane = (Pane) grid.getChildren().get(((int) (point.getY()) * GRIDSIZE + (int) (point.getX())));
                 pane.setStyle("  -fx-border-color: black;");
             }

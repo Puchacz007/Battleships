@@ -1727,12 +1727,15 @@
                     prefWidth="100.0" text="Surrender" AnchorPane.bottomAnchor="120.0" AnchorPane.leftAnchor="100.0"
                     AnchorPane.rightAnchor="100.0"/>
             <Button layoutX="100.0" layoutY="212.0" mnemonicParsing="false" onAction="#exit" prefHeight="25.0"
-                    prefWidth="100.0" text="Exit" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="100.0"
+                    prefWidth="100.0" text="Exit" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="100.0"
                     AnchorPane.rightAnchor="100.0"/>
             <TextField fx:id="saveName" layoutX="76.0" layoutY="44.0" text="Save" AnchorPane.leftAnchor="75.0"
                        AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="44.0"/>
             <Label layoutX="120.0" layoutY="27.0" text="Save Name" AnchorPane.leftAnchor="120.0"
                    AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="27.0"/>
+            <Button layoutX="100.0" layoutY="198.0" mnemonicParsing="false" onAction="#ret" prefHeight="25.0"
+                    prefWidth="100.0" text="Main Menu" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="100.0"
+                    AnchorPane.rightAnchor="100.0"/>
         </children>
     </AnchorPane>
     <AnchorPane fx:id="endgameScreen" layoutX="644.0" layoutY="368.0" prefHeight="219.0" prefWidth="320.0"

@@ -5,17 +5,18 @@ import java.io.Serializable;
 public class GameSave implements Serializable {
 
 
-    private GameGrid computerTargetGrid;
-    private AI computer;
-    private boolean[][] playerAlreadyShoot;
-    private boolean[][] computerAlreadyShoot;
-    private boolean wasDestroyed, wasHit;
-    private float saveTime;
-    private int numberOfPlayerShoots;
-    private int numberOfHits;
-    private int playerShipsNumber;
-    private int[] playerShipsTypeNumber;
-    private int computerShipsNumber;
+    private final GameGrid computerTargetGrid;
+    private final AI computer;
+    private final boolean[][] playerAlreadyShoot;
+    private final boolean[][] computerAlreadyShoot;
+    private final boolean wasDestroyed;
+    private final boolean wasHit;
+    private final float saveTime;
+    private final int numberOfPlayerShoots;
+    private final int numberOfHits;
+    private final int playerShipsNumber;
+    private final int[] playerShipsTypeNumber;
+    private final int computerShipsNumber;
 
     public GameSave(GameGrid gameGrid, AI ai, boolean[][] playerShots, boolean[][] computerShoots, boolean destroy, boolean hit, float time,
                     int numberOfShoots, int numberOfPlayerHits, int plShipsNr, int aiShipsNr, int[] playerShipsNumberByType) {

@@ -13,9 +13,9 @@ public class AI implements Serializable {
     // private int maxShipLength = 3;
     //   private int maxShipWidth = 2;
     private boolean targetFound = false;
-    private Point lastShot, potentialHit;
-    private Vector<Point> potentialHits;
-    private Vector<Point> hits;
+    private final Vector<Point> potentialHits;
+    private final Vector<Point> hits;
+    private Point lastShot;
     public AI()
     {
         potentialHits = new Vector<>();
@@ -58,6 +58,7 @@ public class AI implements Serializable {
 
             return lastShot;
         }
+        Point potentialHit;
         if (wasHit && potentialHits.isEmpty() && !targetFound) //first shoot was a hit
         {
             targetFound = true;
@@ -192,7 +193,7 @@ public class AI implements Serializable {
         int width = -1;
         int temp;
         int size = prNumber + subNumber + crNumber + carrNumber + capNumber;
-        int shipType = -1;//-1=no ship,0=patrol,1=sub,2=cruiser,3=carrier,4=capital
+        int shipType;//-1=no ship,0=patrol,1=sub,2=cruiser,3=carrier,4=capital
 
 
         while (size > 0) {

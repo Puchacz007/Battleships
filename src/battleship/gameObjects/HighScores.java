@@ -4,7 +4,7 @@ import java.io.*;
 
 public class HighScores {
     private static final int HIGSCORESNUMBER = 10;
-    private String[] lines;
+    private final String[] lines;
     private int[] scores;
 
     public HighScores() {
@@ -51,9 +51,8 @@ public class HighScores {
             if (scoreId == 9) return;
         }
         String[] oldLines = lines.clone();
-        for (int i = scoreId + 1; i < HIGSCORESNUMBER; i++) {
-            lines[i] = oldLines[i - 1];
-        }
+        if (HIGSCORESNUMBER - scoreId + 1 >= 0)
+            System.arraycopy(oldLines, scoreId + 1 - 1, lines, scoreId + 1, HIGSCORESNUMBER - scoreId + 1);
 
         String content = nickName + " " + numberOfHits + " " + numberOfPlayerShoots + " " + shotsAccuracy2f + " " + elapsedTimeMin + " " + shipNumber;
         lines[scoreId] = content;

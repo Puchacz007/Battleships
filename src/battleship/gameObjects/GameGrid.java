@@ -10,8 +10,7 @@ public class GameGrid implements Serializable {
     private static final int EMPTY = -1;
     private final int[][] gridTable;
     private int id = 0;
-    private int shipsNumber = 0;
-    private Vector<Ship> shipsVector = new Vector<>();
+    private final Vector<Ship> shipsVector = new Vector<>();
     public GameGrid() {
         gridTable = new int[GRIDSIZE][GRIDSIZE];
         for (int i = 0; i < GRIDSIZE; i++) {
