@@ -37,7 +37,6 @@ public class HighScores {
 
     public void addHighScore(int shipNumber, int numberOfPlayerShoots, int numberOfHits, long startTime, float saveTime, String nickName) {
         countScores();
-        //  String nickName="Tester";
         float shotsAccuracy = 0;
         if (numberOfPlayerShoots > 0) shotsAccuracy = (float) 100 * numberOfHits / numberOfPlayerShoots;
         String shotsAccuracy2f = String.format("%.2f", shotsAccuracy);
@@ -51,8 +50,10 @@ public class HighScores {
             if (scoreId == 9) return;
         }
         String[] oldLines = lines.clone();
-        if (HIGSCORESNUMBER - scoreId + 1 >= 0)
-            System.arraycopy(oldLines, scoreId + 1 - 1, lines, scoreId + 1, HIGSCORESNUMBER - scoreId + 1);
+        for (int i = scoreId + 1; i < HIGSCORESNUMBER; i++) {
+            lines[i] = oldLines[i - 1];
+        }
+
 
         String content = nickName + " " + numberOfHits + " " + numberOfPlayerShoots + " " + shotsAccuracy2f + " " + elapsedTimeMin + " " + shipNumber;
         lines[scoreId] = content;

@@ -406,7 +406,7 @@ public class MainGameController {
         setsSavedGrids();
     }
 
-    public void setsSavedGrids() {
+    private void setsSavedGrids() {
         showPlayerShips();
         for (int targetX = 0; targetX < GRIDSIZE; targetX++) {
             for (int targetY = 0; targetY < GRIDSIZE; targetY++) {
