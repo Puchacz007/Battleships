@@ -54,8 +54,9 @@ public class HighScores {
             lines[i] = oldLines[i - 1];
         }
 
+        String[] nick = nickName.split(" ");
 
-        String content = nickName + " " + numberOfHits + " " + numberOfPlayerShoots + " " + shotsAccuracy2f + " " + elapsedTimeMin + " " + shipNumber;
+        String content = nick[0] + " " + numberOfHits + " " + numberOfPlayerShoots + " " + shotsAccuracy2f + " " + elapsedTimeMin + " " + shipNumber;
         lines[scoreId] = content;
 
 

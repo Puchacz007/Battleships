@@ -20,7 +20,6 @@ public class Main extends Application {
         primaryStage.setMinWidth(primaryStage.getWidth());
         primaryStage.setMaxHeight(primaryStage.getHeight());
         primaryStage.setMaxWidth((primaryStage.getWidth()));
-
     }
 
 
