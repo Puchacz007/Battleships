@@ -7,7 +7,8 @@ import java.util.Vector;
 
 public class AI implements Serializable {
     private static final int GRIDSIZE = 20;
-    int targetLength = 0, targetWidth = 0;
+    private int targetLength = 0;
+    private int targetWidth = 0;
     //  boolean direction = false; //false change length,true change width
     private final GameGrid shipsGrid;
     // private int maxShipLength = 3;
@@ -25,7 +26,7 @@ public class AI implements Serializable {
 
     }
 
-    public int randomInt(int bound)
+    private int randomInt(int bound)
     {
         Random random = new Random();
       return   random.nextInt(bound);

@@ -18,13 +18,13 @@ import java.io.ObjectInputStream;
 public class LoadGame {
 
     public ListView<String> listView;
-    File[] listOfFiles;
+    private File[] listOfFiles;
 
     public void initialize() {
         showSavedGames();
     }
 
-    public void showSavedGames() {
+    private void showSavedGames() {
         File folder = new File("./src/battleship/controller/view/resources/saves/");
         listOfFiles = folder.listFiles();
 
@@ -49,7 +49,7 @@ public class LoadGame {
         startLoadedGame(gameSave, actionEvent);
     }
 
-    public void startLoadedGame(GameSave gameSave, ActionEvent actionEvent) throws IOException {
+    private void startLoadedGame(GameSave gameSave, ActionEvent actionEvent) throws IOException {
 
         FXMLLoader saveLoader = new FXMLLoader(getClass().getResource("view/main_game.fxml"));
 
