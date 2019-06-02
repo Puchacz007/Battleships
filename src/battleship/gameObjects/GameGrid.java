@@ -8,7 +8,7 @@ public class GameGrid implements Serializable {
 
     private static final int GRIDSIZE = 20;
     private static final int EMPTY = -1;
-    private final int[][] gridTable;
+    private int[][] gridTable;
     private int id = 0;
     private final Vector<Ship> shipsVector = new Vector<>();
     public GameGrid() {
@@ -19,6 +19,16 @@ public class GameGrid implements Serializable {
             }
         }
 
+    }
+
+    public void clearGrid() {
+        for (int i = 0; i < GRIDSIZE; i++) {
+            for (int j = 0; j < GRIDSIZE; j++) {
+                gridTable[i][j] = EMPTY;
+            }
+        }
+        id = 0;
+        shipsVector.removeAllElements();
     }
 
 
@@ -32,6 +42,7 @@ public class GameGrid implements Serializable {
     public boolean isDestroyed(int x,int y)
     {
         int shipId = gridTable[x][y];
+        if (shipId == -1) return false;
         return shipsVector.get(shipId).isDestroyed();
     }
 

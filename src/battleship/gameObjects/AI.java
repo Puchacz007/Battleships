@@ -9,10 +9,7 @@ public class AI implements Serializable {
     private static final int GRIDSIZE = 20;
     private int targetLength = 0;
     private int targetWidth = 0;
-    //  boolean direction = false; //false change length,true change width
     private final GameGrid shipsGrid;
-    // private int maxShipLength = 3;
-    //   private int maxShipWidth = 2;
     private boolean targetFound = false;
     private final Vector<Point> potentialHits;
     private final Vector<Point> hits;
@@ -193,83 +190,96 @@ public class AI implements Serializable {
         int length = -1;
         int width = -1;
         int temp;
-        int size = prNumber + subNumber + crNumber + carrNumber + capNumber;
+
+        int startPrNumber = prNumber, starSubNumber = subNumber, startCrNumber = crNumber, startCarrNumber = carrNumber, startCapNumber = capNumber;
         int shipType;//-1=no ship,0=patrol,1=sub,2=cruiser,3=carrier,4=capital
+        boolean run = false;
+        do {
+            if (run) shipsGrid.clearGrid();
+            run = false;
+            prNumber = startPrNumber;
+            subNumber = starSubNumber;
+            crNumber = startCrNumber;
+            carrNumber = startCarrNumber;
+            capNumber = startCapNumber;
+            int size = prNumber + subNumber + crNumber + carrNumber + capNumber;
+            while (size > 0) {
+                int bound = 0;
+                if (prNumber > 0) ++bound;
+                if (subNumber > 0) ++bound;
+                if (crNumber > 0) ++bound;
+                if (carrNumber > 0) ++bound;
+                if (capNumber > 0) ++bound;
+                shipType = randomInt(bound);
 
+                switch (shipType) {
+                    case 0:
+                        length = 1;
+                        width = 1;
 
-        while (size > 0) {
-            int bound = 0;
-            if (prNumber > 0) ++bound;
-            if (subNumber > 0) ++bound;
-            if (crNumber > 0) ++bound;
-            if (carrNumber > 0) ++bound;
-            if (capNumber > 0) ++bound;
-            shipType = randomInt(bound);
-
-            switch (shipType) {
-                case 0:
-                    length = 1;
-                    width = 1;
-
-                    if (prNumber > 0) {
-                        --prNumber;
+                        if (prNumber > 0) {
+                            --prNumber;
+                            break;
+                        }
+                    case 1:
+                        length = 2;
+                        width = 1;
+                        if (subNumber > 0) {
+                            --subNumber;
+                            break;
+                        }
+                    case 2:
+                        length = 3;
+                        width = 1;
+                        if (crNumber > 0) {
+                            --crNumber;
+                            break;
+                        }
+                    case 3:
+                        length = 3;
+                        width = 2;
+                        if (carrNumber > 0) {
+                            --carrNumber;
+                            break;
+                        }
+                    case 4:
+                        length = 4;
+                        width = 1;
+                        if (capNumber > 0) {
+                            --capNumber;
+                            break;
+                        }
                         break;
-                    }
-                case 1:
-                    length = 2;
-                    width = 1;
-                    if (subNumber > 0) {
-                        --subNumber;
-                        break;
-                    }
-                case 2:
-                    length = 3;
-                    width=1;
-                    if (crNumber > 0) {
-                        --crNumber;
-                        break;
-                    }
-                case 3:
-                    length = 3;
-                    width = 2;
-                    if (carrNumber > 0) {
-                        --carrNumber;
-                        break;
-                    }
-                case 4:
-                    length = 4;
-                    width = 1;
-                    if (capNumber > 0) {
-                        --capNumber;
-                        break;
-                    }
-                    break;
-            }
-            //   for(int i = 0;i<crNumber;i++) {
-
-            do {
-                errorExit++;
-
-                if (!chooseRotation()) {
-                    temp = width;
-                    width = length;
-                    length = temp;
                 }
-                targetX = randomInt(GRIDSIZE - length);
-                targetY = randomInt(GRIDSIZE - width);
-                if (shipsGrid.isAvailable(targetX, targetY, length, width)) break;
-                temp = length;
-                length = width;
-                width = temp;
 
-                if (errorExit == 1000000) return;
+                do {
+                    ++errorExit;
 
+                    if (!chooseRotation()) {
+                        temp = width;
+                        width = length;
+                        length = temp;
+                    }
+                    targetX = randomInt(GRIDSIZE - length);
+                    targetY = randomInt(GRIDSIZE - width);
+                    if (shipsGrid.isAvailable(targetX, targetY, length, width)) break;
+                    temp = length;
+                    length = width;
+                    width = temp;
+
+                    if (errorExit == 5000000) {
+                        run = true;
+                        size = 0;
+                        break;
+                    }
+
+                }
+                while (!shipsGrid.isAvailable(targetX, targetY, length, width));
+                if (size == 0) break;
+                shipsGrid.addShip(targetX, targetY, length, width);
+                --size;
             }
-            while (!shipsGrid.isAvailable(targetX, targetY, length, width));
-
-            shipsGrid.addShip(targetX, targetY, length, width);
-            --size;
-        }
+        } while (run);
 
     }
 
