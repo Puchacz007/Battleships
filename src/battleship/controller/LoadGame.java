@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,7 +17,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 public class LoadGame {
-
+    static Logger logger = Logger.getLogger(LoadGame.class);
     public ListView<String> listView;
     private File[] listOfFiles;
 
@@ -45,6 +46,8 @@ public class LoadGame {
         ObjectInputStream objectIn = new ObjectInputStream(fileIn);
         GameSave gameSave = (GameSave) objectIn.readObject();
         System.out.println("The Object  was succesfully read");
+        //logger.debug("The Object  was succesfully read");
+        logger.info("The Object  was succesfully read");
         objectIn.close();
         startLoadedGame(gameSave, actionEvent);
     }

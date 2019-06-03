@@ -16,13 +16,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import org.apache.log4j.Logger;
 
 import java.awt.*;
 import java.io.IOException;
 import java.util.Vector;
 
 public class GameSetUp {
-
+    static Logger logger = Logger.getLogger(GameSetUp.class);
     private static final int GRIDSIZE = 20;
     public Label capitalNr;
     @FXML
@@ -214,7 +215,9 @@ public class GameSetUp {
                                 pane.setStyle("  -fx-border-color: black;");
                             }
                         }
+
                         System.out.println("bad grid drop");
+                        logger.info("bad grip drop");
                     }
                     ((GridPane) event.getSource()).setTranslateX(orgTranslateX);
                     ((GridPane) event.getSource()).setTranslateY(orgTranslateY);

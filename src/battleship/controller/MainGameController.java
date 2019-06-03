@@ -23,6 +23,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import org.apache.log4j.Logger;
 
 import java.awt.*;
 import java.io.FileOutputStream;
@@ -39,7 +40,7 @@ public class MainGameController {
     public Label hits;
     public Label result;
     public AnchorPane mainWindow;
-
+    static Logger logger = Logger.getLogger(MainGameController.class);
     @FXML
     private ImageView target; // target symbol
     private boolean endgame = false;
@@ -106,6 +107,7 @@ public class MainGameController {
         targetX = mouseX;
         targetY = mouseY;
         if (playerAlreadyShoot[targetX][targetY]) {
+            logger.info("You shoot this target already");
             System.out.println("You shoot this target already");
             return;
         }
@@ -293,6 +295,7 @@ public class MainGameController {
             checkVictoryConditions();
         }else
         {
+            logger.info("No selected target");
             System.out.println("No selected target");
         }
 
@@ -361,7 +364,9 @@ public class MainGameController {
         FileOutputStream fileOut = new FileOutputStream("./src/battleship/controller/view/resources/saves/" + name + ".dat");
         ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
         objectOut.writeObject(gameSave);
-        System.out.println("The Object  was succesfully written to a file");
+        logger.debug("The object was succesfully written to file");
+        // System.out.println("The Object  was succesfully written to a file");
+
         objectOut.close();
     }
 
